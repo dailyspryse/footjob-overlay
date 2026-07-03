@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dailys FootJob Overlay — Konfiguration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ══ ROOT ══════════════════════════════════════════════════════════════════ */
+:root {
+  --bg:          #07040c;
+  --panel:       #0e0a16;
+  --panel2:      #120e1e;
+  --panel3:      #09060f;
+  --border:      #1c1428;
+  --border2:     #271c3a;
+  --border3:     #342448;
+  --purple:      #a855f7;
+  --purple-dim:  #7c3aed;
+  --purple-mid:  #9333ea;
+  --purple-bright:#c084fc;
+  --purple-glow: rgba(168,85,247,0.14);
+  --purple-trace:rgba(168,85,247,0.05);
+  --amber:       #ffaa00;
+  --red:         #ff2244;
+  --text:        #d4cce8;
+  --text2:       #7a6e99;
+  --text3:       #3a2e58;
+  --mono:        'IBM Plex Mono', monospace;
+  --display:     'Barlow Condensed', sans-serif;
+  --ui:          'Rajdhani', sans-serif;
+  --carbon: repeating-linear-gradient(
+    45deg,
+    rgba(168,85,247,0.025) 0px,
+    rgba(168,85,247,0.025) 1px,
+    transparent 1px,
+    transparent 5px
+  );
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--ui);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Noise grain */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Subtle purple ambient glow top-center */
+body::after {
+  content: '';
+  position: fixed;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 300px;
+  background: radial-gradient(ellipse at center, rgba(168,85,247,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+::-webkit-scrollbar { width:4px; height:4px; }
+::-webkit-scrollbar-track { background:#06030c; }
+::-webkit-scrollbar-thumb { background:#2a1845; }
+::-webkit-scrollbar-thumb:hover { background:#3a2060; }
+
+/* ══ HEADER ════════════════════════════════════════════════════════════════ */
+.header {
+  background: var(--panel3);
+  background-image: var(--carbon);
+  border-bottom: 1px solid var(--border2);
+  padding: 0 28px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--purple);
+  box-shadow: 0 0 14px var(--purple);
+}
+
+.header-left { display:flex; align-items:center; gap:14px; }
+
+.header-title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1;
+}
+
+.header-title em {
+  color: var(--purple);
+  font-style: normal;
+  text-shadow: 0 0 20px rgba(168,85,247,0.55);
+}
+
+.v-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--purple);
+  border: 1px solid rgba(168,85,247,0.4);
+  padding: 2px 7px;
+  letter-spacing: 1px;
+}
+
+.header-div { width:1px; height:20px; background:var(--border2); }
+
+.hdr-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 1px;
+}
+
+.led {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--text3);
+  transition: background 0.3s, box-shadow 0.3s;
+  flex-shrink: 0;
+}
+.led.purple { background:var(--purple); box-shadow:0 0 10px var(--purple); animation:lp 1.6s infinite; }
+.led.red    { background:var(--red);    box-shadow:0 0 8px var(--red); }
+.led.amber  { background:var(--amber);  box-shadow:0 0 8px var(--amber); }
+@keyframes lp { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.obs-btn {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+  background: transparent;
+  border: 1px solid var(--border2);
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  clip-path: polygon(8px 0%,100% 0%,calc(100%-8px) 100%,0% 100%);
+}
+.obs-btn:hover { color:var(--purple); border-color:rgba(168,85,247,0.5); background:var(--purple-trace); }
+
+/* ══ SECTION RULES ═════════════════════════════════════════════════════════ */
+.sec-rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 28px;
+  background: var(--panel3);
+  border-bottom: 1px solid var(--border);
+}
+.sec-label { font-family:var(--mono); font-size:9px; letter-spacing:3px; color:var(--text3); white-space:nowrap; text-transform:uppercase; }
+.sec-line  { flex:1; height:1px; background:linear-gradient(to right,var(--border2),transparent); }
+.sec-diamond { width:4px; height:4px; background:var(--border3); transform:rotate(45deg); flex-shrink:0; }
+
+/* ══ PREVIEW ═══════════════════════════════════════════════════════════════ */
+.preview-wrap {
+  background: #000;
+  border-bottom: 2px solid var(--border2);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Scanlines */
+.preview-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.12) 3px,rgba(0,0,0,0.12) 4px);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Corner brackets — purple */
+.preview-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(var(--purple),var(--purple)) top left no-repeat,
+    linear-gradient(var(--purple),var(--purple)) top left no-repeat,
+    linear-gradient(var(--purple),var(--purple)) top right no-repeat,
+    linear-gradient(var(--purple),var(--purple)) top right no-repeat,
+    linear-gradient(var(--purple),var(--purple)) bottom left no-repeat,
+    linear-gradient(var(--purple),var(--purple)) bottom left no-repeat,
+    linear-gradient(var(--purple),var(--purple)) bottom right no-repeat,
+    linear-gradient(var(--purple),var(--purple)) bottom right no-repeat;
+  background-size: 2px 16px,16px 2px, 2px 16px,16px 2px, 2px 16px,16px 2px, 2px 16px,16px 2px;
+  pointer-events: none;
+  z-index: 11;
+  opacity: 0.65;
+}
+
+.prev-label { position:absolute; top:8px; left:20px; font-family:var(--mono); font-size:8px; letter-spacing:3px; color:rgba(168,85,247,0.5); z-index:12; text-transform:uppercase; }
+.prev-res   { position:absolute; top:8px; right:20px; font-family:var(--mono); font-size:8px; letter-spacing:2px; color:var(--text3); z-index:12; }
+
+.preview-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 22px 0 14px;
+}
+.preview-inner iframe {
+  width: 1280px;
+  height: 120px;
+  border: none;
+  display: block;
+  pointer-events: none;
+  transform-origin: top left;
+}
+
+/* ══ FEATURE BAR ═══════════════════════════════════════════════════════════ */
+.feat-bar {
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  background: var(--panel3);
+  background-image: var(--carbon);
+  border-bottom: 1px solid var(--border2);
+  overflow-x: auto;
+  gap: 0;
+}
+
+.fbadge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 18px 11px 0;
+  margin-right: 18px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--purple);
+  white-space: nowrap;
+  border-right: 1px solid var(--border);
+}
+.fbadge:last-child { border-right:none; margin-right:0; }
+.fbadge.off { color:var(--text3); }
+
+.fbadge-check {
+  width: 14px; height: 14px;
+  border: 1px solid currentColor;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px;
+  font-family: var(--mono);
+  flex-shrink: 0;
+}
+.fbadge.off .fbadge-check { opacity:0.4; }
+
+/* ══ MAIN GRID ═════════════════════════════════════════════════════════════ */
+.main-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr 280px;
+  border-bottom: 1px solid var(--border2);
+  position: relative;
+  z-index: 1;
+}
+
+.panel { border-right:1px solid var(--border); overflow:hidden; }
+.panel:last-child { border-right:none; }
+
+.p-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: var(--panel3);
+  background-image: var(--carbon);
+  border-bottom: 1px solid var(--border2);
+}
+.p-num {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--purple);
+  background: rgba(168,85,247,0.1);
+  border: 1px solid rgba(168,85,247,0.3);
+  padding: 1px 5px;
+  letter-spacing: 1px;
+}
+.p-title {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.p-body { padding:16px 18px; }
+
+/* ── Left: Files ── */
+.file-list { list-style:none; display:flex; flex-direction:column; gap:3px; margin-bottom:14px; }
+
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  background: var(--panel2);
+  background-image: var(--carbon);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--border2);
+  transition: all 0.15s;
+  cursor: default;
+}
+.file-item:hover { border-left-color:var(--purple); background:rgba(168,85,247,0.04); }
+
+.fi-icon { font-size:14px; flex-shrink:0; width:20px; text-align:center; }
+.fi-name { font-family:var(--mono); font-size:11px; font-weight:500; color:#ccc; }
+.fi-desc { font-family:var(--ui); font-size:10px; color:var(--text3); margin-top:2px; }
+
+.notice {
+  padding: 11px 13px;
+  background: var(--purple-trace);
+  border: 1px solid rgba(168,85,247,0.18);
+  border-left: 2px solid var(--purple);
+  font-family: var(--ui);
+  font-size: 11px;
+  color: #a09ab8;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+.notice .nh {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--purple);
+  margin-bottom: 5px;
+  display: block;
+}
+.notice a { color:var(--purple); text-decoration:none; }
+.notice a:hover { text-decoration:underline; }
+
+.notice.blue {
+  border-left-color: #3b82f6;
+  background: rgba(59,130,246,0.05);
+  border-color: rgba(59,130,246,0.15);
+  border-left: 2px solid #3b82f6;
+}
+.notice.blue .nh { color:#5b9fff; }
+
+.notice.warn {
+  border-left-color: var(--amber);
+  background: rgba(255,170,0,0.04);
+  border-color: rgba(255,170,0,0.15);
+  border-left: 2px solid var(--amber);
+}
+.notice.warn .nh { color: var(--amber); }
+
+/* ── Center: Form ── */
+.fsec { margin-bottom:16px; }
+
+.fsec-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.fsec-label::before { content:''; width:3px; height:3px; background:var(--purple); transform:rotate(45deg); flex-shrink:0; }
+
+.frow { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px; }
+.frow.s1 { grid-template-columns:1fr; }
+.fgrp { display:flex; flex-direction:column; gap:4px; }
+.flabel { font-family:var(--mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--text3); }
+
+.finput, .fselect {
+  background: var(--panel2);
+  background-image: var(--carbon);
+  border: 1px solid var(--border2);
+  border-bottom: 1px solid var(--border3);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 8px 10px;
+  outline: none;
+  transition: all 0.15s;
+  width: 100%;
+  appearance: none;
+}
+.finput:focus, .fselect:focus {
+  border-color: rgba(168,85,247,0.6);
+  background: rgba(168,85,247,0.03);
+  box-shadow: inset 0 0 0 1px rgba(168,85,247,0.15), 0 0 0 2px rgba(168,85,247,0.06);
+}
+.finput::placeholder { color:var(--text3); font-weight:300; }
+.fselect option { background:#10091a; }
+
+.sel-wrap { position:relative; }
+.sel-wrap::after { content:'▾'; position:absolute; right:9px; top:50%; transform:translateY(-50%); color:var(--text3); font-size:10px; pointer-events:none; font-family:var(--mono); }
+.sel-wrap .fselect { padding-right:28px; }
+
+.api-row { display:flex; gap:6px; margin-bottom:8px; }
+.api-row .finput { flex:1; }
+
+.api-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 11px;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--border3);
+  margin-bottom: 14px;
+  transition: border-left-color 0.3s;
+}
+.api-status.ok  { border-left-color: var(--purple); }
+.api-status.err { border-left-color: var(--red); }
+
+.ast { font-family:var(--ui); font-size:12px; font-weight:600; color:#7a6e99; flex:1; }
+.asd { font-family:var(--mono); font-size:10px; color:var(--text3); }
+
+.opts-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:12px; }
+
+.opt-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--panel2);
+  background-image: var(--carbon);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--border2);
+  cursor: pointer;
+  font-family: var(--ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text2);
+  user-select: none;
+  transition: all 0.15s;
+}
+.opt-item:hover { background:rgba(168,85,247,0.03); }
+.opt-item.active { border-left-color:var(--purple); color:var(--text); background:rgba(168,85,247,0.06); }
+
+.opt-item input[type=checkbox] {
+  appearance: none;
+  width: 13px; height: 13px;
+  border: 1px solid var(--border3);
+  background: var(--panel3);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.opt-item input[type=checkbox]:checked {
+  background: var(--purple);
+  border-color: var(--purple);
+  box-shadow: 0 0 6px rgba(168,85,247,0.4);
+}
+.opt-item input[type=checkbox]:checked::after {
+  content: '';
+  position: absolute;
+  left: 3px; top: 1px;
+  width: 5px; height: 7px;
+  border: 1.5px solid #000;
+  border-top: none; border-left: none;
+  transform: rotate(45deg);
+}
+
+.refresh-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 8px 11px;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+}
+.refresh-row label { font-family:var(--mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--text3); white-space:nowrap; }
+.refresh-row input[type=range] {
+  flex: 1; height: 2px; appearance: none;
+  background: linear-gradient(to right, var(--purple) 0%, var(--border3) 0%);
+  outline: none; cursor: pointer;
+}
+.refresh-row input[type=range]::-webkit-slider-thumb {
+  appearance: none; width:10px; height:10px;
+  background: var(--purple); cursor: pointer;
+  transform: rotate(45deg);
+  box-shadow: 0 0 8px rgba(168,85,247,0.5);
+}
+.refresh-val { font-family:var(--mono); font-size:13px; font-weight:500; color:var(--purple); min-width:36px; text-align:right; }
+
+/* Buttons */
+.btn {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  padding: 10px 18px;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--purple);
+  color: #fff;
+  clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+}
+.btn-primary:hover { background:var(--purple-bright); box-shadow:0 0 20px rgba(168,85,247,0.4); }
+.btn-primary:disabled { background:#2a1040; color:#3a2060; cursor:not-allowed; box-shadow:none; }
+.btn-ghost { background:transparent; color:var(--text2); border:1px solid var(--border2); }
+.btn-ghost:hover { color:var(--text); border-color:var(--border3); }
+.btn-sm { font-size:10px; padding:7px 12px; letter-spacing:2px; }
+.btn-block { width:100%; margin-top:6px; }
+
+/* URL Output */
+.url-out {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  padding: 13px;
+  background: var(--purple-trace);
+  border: 1px solid rgba(168,85,247,0.25);
+  border-left: 2px solid var(--purple);
+  margin-top: 12px;
+}
+.url-out.visible { display:flex; animation:fadeIn 0.2s ease-out; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+.url-lbl { font-family:var(--mono); font-size:9px; letter-spacing:3px; color:var(--purple); text-transform:uppercase; }
+.url-txt {
+  background: var(--panel3);
+  border: 1px solid var(--border2);
+  padding: 9px 11px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #9080b0;
+  word-break: break-all;
+  line-height: 1.7;
+  max-height: 72px;
+  overflow-y: auto;
+}
+.url-acts { display:flex; gap:8px; flex-wrap:wrap; }
+.copy-ok { font-family:var(--ui); font-weight:600; font-size:11px; color:var(--purple); display:none; }
+
+/* ── Right: Events ── */
+.ev-stack { display:flex; flex-direction:column; gap:5px; margin-bottom:14px; }
+
+.ev-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--panel2);
+  background-image: var(--carbon);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--border2);
+  transition: all 0.15s;
+}
+.ev-card.goal   { --c:var(--purple); color:var(--purple); }
+.ev-card.yellow { --c:var(--amber);  color:var(--amber); }
+.ev-card.red    { --c:var(--red);    color:var(--red); }
+.ev-card:hover  { border-left-color:var(--c); background:rgba(0,0,0,0.2); }
+
+.ev-icon  { font-size:18px; flex-shrink:0; line-height:1; margin-top:1px; }
+.ev-title { font-family:var(--display); font-weight:800; font-size:14px; letter-spacing:2px; text-transform:uppercase; margin-bottom:3px; }
+.ev-desc  { font-family:var(--ui); font-size:11px; color:var(--text2); line-height:1.5; }
+
+/* Mini scoreboard preview */
+.mini-score {
+  background: #020106;
+  border: 1px solid var(--border2);
+  overflow: hidden;
+  margin-bottom: 12px;
+  position: relative;
+}
+.mini-score::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.18) 2px,rgba(0,0,0,0.18) 3px);
+  pointer-events: none;
+}
+.mini-badges {
+  display: flex;
+  gap: 14px;
+  padding: 5px 10px;
+  background: rgba(0,0,0,0.4);
+  border-bottom: 1px solid rgba(168,85,247,0.08);
+}
+.mini-badge { font-family:var(--display); font-size:9px; font-weight:700; letter-spacing:1.5px; color:var(--purple); display:flex; align-items:center; gap:4px; }
+.mini-badge::before { content:'✓'; font-size:8px; }
+
+.mini-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 14px;
+  font-family: var(--display);
+  font-weight: 700;
+}
+.mini-time {
+  font-size: 16px; color:#fff; letter-spacing:2px;
+  background: rgba(168,85,247,0.1); padding:4px 8px;
+  border: 1px solid rgba(168,85,247,0.2);
+  min-width:52px; text-align:center; line-height:1;
+}
+.mini-extra { font-size:9px; color:var(--purple-bright); font-family:var(--mono); margin-top:2px; text-align:center; }
+.mini-team  { font-size:17px; letter-spacing:3px; color:#fff; }
+.mini-flag  { font-size:15px; line-height:1; }
+.mini-sbox  { font-size:20px; color:#fff; background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.2); padding:4px 12px; min-width:36px; text-align:center; }
+.mini-trophy { font-size:17px; filter:drop-shadow(0 0 5px rgba(168,85,247,0.4)); }
+.mini-scorer { font-family:var(--mono); font-size:9px; color:#554466; padding:0 14px 7px; letter-spacing:0.5px; }
+
+.checklist { display:grid; grid-template-columns:1fr 1fr; gap:5px; }
+.chk-item {
+  font-family:var(--ui); font-size:11px; font-weight:600; color:var(--text2);
+  display:flex; align-items:center; gap:5px;
+}
+.chk-item::before { content:''; width:5px; height:5px; background:var(--purple); transform:rotate(45deg); flex-shrink:0; box-shadow:0 0 4px rgba(168,85,247,0.4); }
+
+/* WM badge */
+.wm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(168,85,247,0.12);
+  border: 1px solid rgba(168,85,247,0.35);
+  color: var(--purple);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  padding: 3px 10px;
+  margin-left: auto;
+}
+
+/* ══ BOTTOM GRID ════════════════════════════════════════════════════════════ */
+.bot-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--border2);
+}
+.bot-panel { border-right:1px solid var(--border); overflow:hidden; }
+.bot-panel:last-child { border-right:none; }
+
+.steps { display:flex; flex-direction:column; gap:5px; margin-bottom:14px; }
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 11px;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  transition: all 0.15s;
+}
+.step:hover { border-color:var(--border2); }
+.step-n {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--purple);
+  width: 18px; height: 18px;
+  border: 1px solid rgba(168,85,247,0.35);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.step-t { font-family:var(--ui); font-size:12px; font-weight:500; color:#7a6e99; line-height:1.4; }
+.step-t strong { color:var(--text); font-weight:700; }
+
+.obs-box { background:#030108; border:1px solid var(--border2); overflow:hidden; margin-bottom:10px; }
+.obs-head {
+  display: flex; align-items: center; gap: 8px; padding: 6px 11px;
+  background: var(--panel3); border-bottom: 1px solid var(--border2);
+  font-family: var(--mono); font-size: 9px; letter-spacing: 2px; color: var(--text3); text-transform: uppercase;
+}
+.obs-row { display:flex; align-items:center; padding:6px 11px; border-bottom:1px solid var(--border); gap:8px; }
+.obs-row:last-child { border-bottom:none; }
+.obs-k { font-family:var(--mono); font-size:9px; color:var(--text3); letter-spacing:1.5px; text-transform:uppercase; width:80px; flex-shrink:0; }
+.obs-v { font-family:var(--mono); font-size:11px; color:var(--text); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.obs-v.hi { color:var(--purple); }
+
+.hint {
+  padding: 10px 12px;
+  border: 1px solid rgba(59,130,246,0.12);
+  border-left: 2px solid #3b82f6;
+  background: rgba(59,130,246,0.05);
+  font-family: var(--ui); font-size: 11px; color: #7a8599; line-height: 1.6; margin-bottom: 8px;
+}
+.hint strong { font-family:var(--display); font-weight:700; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:#5b9fff; display:block; margin-bottom:4px; }
+
+.api-info {
+  padding: 11px 12px;
+  border: 1px solid rgba(255,170,0,0.12);
+  border-left: 2px solid var(--amber);
+  background: rgba(255,170,0,0.04);
+  font-family: var(--ui); font-size: 11px; color: #7a6e5a; line-height: 1.6; margin-bottom: 8px;
+}
+.api-info strong { font-family:var(--display); font-weight:700; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--amber); display:block; margin-bottom:4px; }
+.api-info code {
+  display: block; background: var(--panel3); border: 1px solid var(--border2);
+  padding: 7px 10px; font-family: var(--mono); font-size: 10px;
+  color: var(--purple); margin-top: 7px; word-break:break-all;
+}
+
+/* ══ FOOTER ═════════════════════════════════════════════════════════════════ */
+.footer {
+  background: var(--panel3);
+  background-image: var(--carbon);
+  border-top: 1px solid var(--border2);
+  padding: 12px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer-badges { display:flex; gap:20px; flex-wrap:wrap; }
+.f-badge {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--purple);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.f-badge::before { content:''; width:5px; height:5px; background:var(--purple); transform:rotate(45deg); box-shadow:0 0 5px rgba(168,85,247,0.5); }
+.footer-right { font-family:var(--mono); font-size:9px; color:var(--text3); letter-spacing:2px; text-transform:uppercase; }
+
+/* ══ RESPONSIVE ═════════════════════════════════════════════════════════════ */
+@media (max-width:960px) {
+  .main-grid { grid-template-columns:1fr; }
+  .panel { border-right:none; border-bottom:1px solid var(--border); }
+  .bot-grid { grid-template-columns:1fr; }
+  .bot-panel { border-right:none; border-bottom:1px solid var(--border); }
+  .frow { grid-template-columns:1fr; }
+  .opts-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════════════════════ -->
+<header class="header">
+  <div class="header-left">
+    <div class="header-title">⚽ DAILYS <em>FOOTJOB</em> OVERLAY</div>
+    <div class="v-tag">v2.0</div>
+    <div class="header-div"></div>
+    <div class="hdr-status">
+      <div class="led" id="hdrLed"></div>
+      <span id="hdrTxt">BEREIT</span>
+    </div>
+  </div>
+  <button class="obs-btn" onclick="scrollToOBS()">📺 FÜR OBS STUDIO</button>
+</header>
+
+<!-- ══ SECTION RULE ════════════════════════════════════════════════════════ -->
+<div class="sec-rule">
+  <div class="sec-diamond"></div>
+  <div class="sec-label">OVERLAY PREVIEW — BROADCAST OUTPUT</div>
+  <div class="sec-line"></div>
+  <div class="sec-label" style="color:var(--purple)">1280×120 PX</div>
+</div>
+
+<!-- ══ PREVIEW ═════════════════════════════════════════════════════════════ -->
+<div class="preview-wrap">
+  <div class="prev-label">⬛ BROADCAST OUTPUT</div>
+  <div class="prev-res">1280×120 PX</div>
+  <div class="preview-inner" id="prevInner">
+    <iframe id="prevFrame" src="overlay.html?demo=1" scrolling="no"></iframe>
+  </div>
+</div>
+
+<!-- ══ FEATURE BAR ══════════════════════════════════════════════════════════ -->
+<div class="feat-bar">
+  <div class="fbadge"><span class="fbadge-check">✓</span> LIVE SCORE</div>
+  <div class="fbadge"><span class="fbadge-check">✓</span> SPIELZEIT</div>
+  <div class="fbadge off" id="fb-anim">   <span class="fbadge-check"> </span> TORE ANIMATION</div>
+  <div class="fbadge off" id="fb-cards">  <span class="fbadge-check"> </span> KARTEN</div>
+  <div class="fbadge off" id="fb-extra">  <span class="fbadge-check"> </span> NACHSPIELZEIT</div>
+  <div class="fbadge off" id="fb-pen">    <span class="fbadge-check"> </span> ELFMETERSCHIESSEN</div>
+  <div class="wm-badge">🏆 WM 2026 SUPPORTED</div>
+</div>
+
+<!-- ══ MAIN GRID ════════════════════════════════════════════════════════════ -->
+<div class="main-grid">
+
+  <!-- LEFT -->
+  <div class="panel">
+    <div class="p-head"><span class="p-num">01</span><span class="p-title">PAKET-INHALT</span></div>
+    <div class="p-body">
+      <ul class="file-list">
+        <li class="file-item"><span class="fi-icon">🌐</span><div><div class="fi-name">overlay.html</div><div class="fi-desc">OBS Browser Source — das eigentliche Overlay</div></div></li>
+        <li class="file-item"><span class="fi-icon">⚙️</span><div><div class="fi-name">config.html</div><div class="fi-desc">Diese Konfigurationsseite</div></div></li>
+        <li class="file-item"><span class="fi-icon">📋</span><div><div class="fi-name">teams.json</div><div class="fi-desc">Team-Datenbank (Kürzel, Länder, Flaggen)</div></div></li>
+      </ul>
+
+      <div class="notice warn">
+        <span class="nh">⚡ RATE LIMIT BEACHTEN</span>
+        Free Plan: <strong>100 Anfragen/Tag</strong>, max. 10/Minute.<br>
+        Empfehlung: <strong>Refresh auf 90s</strong> setzen (60 req pro Spiel).
+        Bei 60s: ein 90-Min-Match = ~90 req (fast alles aufgebraucht!).
+      </div>
+
+      <div class="notice">
+        <span class="nh">🔑 API-KEY</span>
+        Dein Key ist voreingestellt. Du kannst ihn jederzeit im Feld rechts ändern oder zurücksetzen.
+      </div>
+
+      <div class="notice blue">
+        <span class="nh" style="color:#5b9fff">📺 OBS-TIPP</span>
+        Browser-Source: Breite <strong style="color:#fff">1280</strong>, Höhe <strong style="color:#fff">120</strong>. Transparenz aktivieren.
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="panel">
+    <div class="p-head"><span class="p-num">02</span><span class="p-title">SPIEL AUSWÄHLEN</span></div>
+    <div class="p-body">
+
+      <div class="fsec">
+        <div class="fsec-label">API VERBINDUNG</div>
+        <div class="fgrp" style="margin-bottom:7px">
+          <div class="flabel">API-KEY (api-football.com)</div>
+          <div class="api-row">
+            <input type="text" class="finput" id="apiKeyInput" autocomplete="off" spellcheck="false"
+              value="5b64c4de80bf8e61facd74ae73539a6a">
+            <button class="btn btn-ghost btn-sm" onclick="testKey()" id="testBtn">🔌 TEST</button>
+          </div>
+        </div>
+        <div class="api-status" id="apiStatus">
+          <div class="led" id="apiLed"></div>
+          <span class="ast" id="apiTxt">Auf TEST klicken um Verbindung zu prüfen</span>
+          <span class="asd" id="apiDetail"></span>
+        </div>
+        <!-- Request counter -->
+        <div id="reqInfo" style="display:none; font-family:var(--mono); font-size:10px; color:var(--text3); padding:4px 0; letter-spacing:1px;"></div>
+      </div>
+
+      <div class="fsec">
+        <div class="fsec-label">SPIEL FINDEN</div>
+        <div class="frow">
+          <div class="fgrp">
+            <div class="flabel">WETTBEWERB</div>
+            <div class="sel-wrap">
+              <select class="fselect" id="leagueSelect">
+                <option value="">— Wählen —</option>
+                <optgroup label="🏆 International">
+                  <option value="1:2026">⚽ FIFA WM 2026 (läuft gerade!)</option>
+                  <option value="1:2022">⚽ FIFA WM 2022</option>
+                  <option value="4">UEFA Euro 2024</option>
+                  <option value="9">Copa America</option>
+                  <option value="34">Africa Cup</option>
+                </optgroup>
+                <optgroup label="UEFA Club">
+                  <option value="2">Champions League</option>
+                  <option value="3">Europa League</option>
+                  <option value="848">Conference League</option>
+                </optgroup>
+                <optgroup label="Top-Ligen">
+                  <option value="39">Premier League</option>
+                  <option value="140">La Liga</option>
+                  <option value="78">Bundesliga</option>
+                  <option value="135">Serie A</option>
+                  <option value="61">Ligue 1</option>
+                  <option value="88">Eredivisie</option>
+                  <option value="94">Primeira Liga</option>
+                  <option value="144">Jupiler Pro</option>
+                </optgroup>
+                <optgroup label="Weitere">
+                  <option value="71">Brasileirao</option>
+                  <option value="128">Liga Profesional ARG</option>
+                  <option value="203">Saudi Pro League</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+          <div class="fgrp">
+            <div class="flabel">DATUM</div>
+            <input type="date" class="finput" id="dateInput">
+          </div>
+        </div>
+
+        <div class="frow" style="margin-bottom:10px">
+          <div class="fgrp">
+            <div class="flabel">SAISON</div>
+            <div class="sel-wrap">
+              <select class="fselect" id="seasonSelect">
+                <option value="2026" selected>2026</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+              </select>
+            </div>
+          </div>
+          <div class="fgrp" style="justify-content:flex-end;padding-top:20px">
+            <button class="btn btn-ghost btn-sm" onclick="searchFixtures()" id="searchBtn">🔍 LADEN</button>
+          </div>
+        </div>
+
+        <div class="fgrp" style="margin-bottom:10px">
+          <div class="flabel">SPIEL AUSWÄHLEN</div>
+          <div class="sel-wrap">
+            <select class="fselect" id="fixtureSelect" onchange="onFixtureChange()">
+              <option value="">— Zuerst Spiele laden —</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="frow">
+          <div class="fgrp">
+            <div class="flabel">HEIM-KÜRZEL (OPT.)</div>
+            <input type="text" class="finput" id="homeCode" placeholder="z.B. USA" maxlength="4" style="text-transform:uppercase">
+          </div>
+          <div class="fgrp">
+            <div class="flabel">AUSWÄRTS-KÜRZEL (OPT.)</div>
+            <input type="text" class="finput" id="awayCode" placeholder="z.B. GER" maxlength="4" style="text-transform:uppercase">
+          </div>
+        </div>
+      </div>
+
+      <div class="fsec">
+        <div class="fsec-label">OPTIONEN</div>
+        <div class="opts-grid">
+          <label class="opt-item active" id="opt-extra">  <input type="checkbox" id="chk-extra"   checked onchange="syncBadge();syncOpt(this,'opt-extra')">   Nachspielzeit</label>
+          <label class="opt-item active" id="opt-anim">   <input type="checkbox" id="chk-anim"    checked onchange="syncBadge();syncOpt(this,'opt-anim')">    Tor-Animation</label>
+          <label class="opt-item active" id="opt-cards">  <input type="checkbox" id="chk-cards"   checked onchange="syncBadge();syncOpt(this,'opt-cards')">   Karten</label>
+          <label class="opt-item"        id="opt-penalty"><input type="checkbox" id="chk-penalty"        onchange="syncBadge();syncOpt(this,'opt-penalty')"> Elfmeter-Modus</label>
+        </div>
+
+        <div class="refresh-row">
+          <label>REFRESH</label>
+          <input type="range" id="refreshSlider" min="60" max="180" step="10" value="90"
+            oninput="el('refreshVal').textContent=this.value+'s'; updateTrack(this)">
+          <span class="refresh-val" id="refreshVal">90s</span>
+        </div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:1px;padding:0 0 10px 0;">
+          ↳ 90s = ~60 req/Spiel ✓ sicher &nbsp;|&nbsp; 60s = ~90 req/Spiel ⚠ knapp
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-block" onclick="generateURL()">▶ OBS-URL GENERIEREN</button>
+      <button class="btn btn-ghost btn-block" onclick="resetAll()" style="margin-top:6px;font-size:11px;letter-spacing:2px">↺ ZURÜCKSETZEN</button>
+
+      <div class="url-out" id="urlBox">
+        <div class="url-lbl">✔ DEINE OBS-URL — IN BROWSER SOURCE EINFÜGEN</div>
+        <div class="url-txt" id="urlTxt"></div>
+        <div class="url-acts">
+          <button class="btn btn-primary btn-sm" onclick="copyURL()">📋 KOPIEREN</button>
+          <button class="btn btn-ghost btn-sm" onclick="openPreview()">👁 VORSCHAU</button>
+        </div>
+        <div class="copy-ok" id="copyOk">✔ URL kopiert!</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="panel">
+    <div class="p-head"><span class="p-num">03</span><span class="p-title">FEATURES & EVENTS</span></div>
+    <div class="p-body">
+      <div class="ev-stack">
+        <div class="ev-card goal">
+          <div class="ev-icon">⚽</div>
+          <div><div class="ev-title">TOR!</div><div class="ev-desc">Lila Screen-Flash + Torschütze mit Minute eingeblendet.</div></div>
+        </div>
+        <div class="ev-card yellow">
+          <div class="ev-icon">🟨</div>
+          <div><div class="ev-title">GELBE KARTE</div><div class="ev-desc">Popup mit Spielername 5 Sek. in Overlay-Ecke.</div></div>
+        </div>
+        <div class="ev-card red">
+          <div class="ev-icon">🟥</div>
+          <div><div class="ev-title">ROTE KARTE</div><div class="ev-desc">Rotes Popup automatisch aus Live-Daten.</div></div>
+        </div>
+      </div>
+
+      <div class="mini-score">
+        <div class="mini-badges">
+          <div class="mini-badge">WM 2026</div>
+          <div class="mini-badge">LIVE</div>
+          <div class="mini-badge">KARTEN</div>
+        </div>
+        <div class="mini-bar">
+          <div>
+            <div class="mini-time">67'</div>
+            <div class="mini-extra">+0</div>
+          </div>
+          <span class="mini-flag">🇺🇸</span>
+          <span class="mini-team">USA</span>
+          <span class="mini-sbox">2</span>
+          <span class="mini-trophy">🏆</span>
+          <span class="mini-sbox">1</span>
+          <span class="mini-team">GER</span>
+          <span class="mini-flag">🇩🇪</span>
+        </div>
+        <div class="mini-scorer">⚽ Pulisic 23' · ⚽ Adams 55' &nbsp;|&nbsp; ⚽ Müller 38'</div>
+      </div>
+
+      <div class="checklist">
+        <div class="chk-item">Echtzeit-Score</div>
+        <div class="chk-item">Gelbe & Rote Karte</div>
+        <div class="chk-item">Torschützen + Min.</div>
+        <div class="chk-item">Elfmeterschiessen</div>
+        <div class="chk-item">Nachspielzeit</div>
+        <div class="chk-item">Transparenz</div>
+        <div class="chk-item">WM 2026 ✓</div>
+        <div class="chk-item">Smart Rate-Limit</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION RULE ════════════════════════════════════════════════════════ -->
+<div class="sec-rule" id="obsSection">
+  <div class="sec-diamond"></div>
+  <div class="sec-label">OBS STUDIO INTEGRATION</div>
+  <div class="sec-line"></div>
+</div>
+
+<!-- ══ BOTTOM ═══════════════════════════════════════════════════════════════ -->
+<div class="bot-grid">
+  <div class="bot-panel">
+    <div class="p-head"><span class="p-num">04</span><span class="p-title">IN OBS EINBINDEN</span></div>
+    <div class="p-body">
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><div class="step-t">OBS Studio öffnen</div></div>
+        <div class="step"><div class="step-n">2</div><div class="step-t">Szenen → Quellen → <strong>+</strong></div></div>
+        <div class="step"><div class="step-n">3</div><div class="step-t">Quell-Typ: <strong>Browser</strong></div></div>
+        <div class="step"><div class="step-n">4</div><div class="step-t">Generierte URL einfügen</div></div>
+        <div class="step"><div class="step-n">5</div><div class="step-t">Breite <strong>1280</strong> · Höhe <strong>120</strong></div></div>
+        <div class="step"><div class="step-n">✓</div><div class="step-t" style="color:var(--purple)">Overlay live!</div></div>
+      </div>
+      <div class="obs-box">
+        <div class="obs-head">📺 BROWSER SOURCE SETTINGS</div>
+        <div class="obs-row"><span class="obs-k">URL</span><span class="obs-v" id="obsUrlShort">— noch nicht generiert —</span></div>
+        <div class="obs-row"><span class="obs-k">BREITE</span><span class="obs-v hi">1280</span></div>
+        <div class="obs-row"><span class="obs-k">HÖHE</span><span class="obs-v hi">120</span></div>
+        <div class="obs-row"><span class="obs-k">FPS</span><span class="obs-v">30</span></div>
+        <div class="obs-row"><span class="obs-k">TRANSP.</span><span class="obs-v hi">✔ AKTIV</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bot-panel">
+    <div class="p-head"><span class="p-num">05</span><span class="p-title">RATE LIMITS & HINWEISE</span></div>
+    <div class="p-body">
+      <div class="steps">
+        <div class="step"><div class="step-n">!</div><div class="step-t">Max. <strong>10 Anfragen/Minute</strong></div></div>
+        <div class="step"><div class="step-n">!</div><div class="step-t">Max. <strong>100 Anfragen/Tag</strong></div></div>
+        <div class="step"><div class="step-n">!</div><div class="step-t"><strong>90s Refresh</strong> = ~60 req/Spiel ✓</div></div>
+        <div class="step"><div class="step-n">!</div><div class="step-t">Bei HT: Overlay pollt alle <strong>3 Min.</strong></div></div>
+        <div class="step"><div class="step-n">!</div><div class="step-t">Bei Abpfiff: Polling <strong>stoppt</strong> automatisch</div></div>
+        <div class="step"><div class="step-n">!</div><div class="step-t">Req-Counter im Overlay sichtbar</div></div>
+      </div>
+      <div class="hint">
+        <strong>💡 WM 2026 TIPP</strong>
+        Wettbewerb "FIFA WM 2026" wählen, Saison 2026. Die WM läuft aktuell — API unterstützt alle Gruppenspiele und KO-Runde live!
+      </div>
+    </div>
+  </div>
+
+  <div class="bot-panel">
+    <div class="p-head"><span class="p-num">06</span><span class="p-title">API-KEY INFO</span></div>
+    <div class="p-body">
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><div class="step-t"><a href="https://www.api-football.com" target="_blank" style="color:var(--purple)">api-football.com</a> aufrufen</div></div>
+        <div class="step"><div class="step-n">2</div><div class="step-t"><strong>Login</strong> → Dashboard</div></div>
+        <div class="step"><div class="step-n">3</div><div class="step-t">API-Key kopieren → oben einfügen</div></div>
+        <div class="step"><div class="step-n">4</div><div class="step-t"><strong>TEST</strong> → verbleibende Requests sehen</div></div>
+      </div>
+      <div class="api-info">
+        <strong>🔑 DEIN KEY (VOREINGESTELLT)</strong>
+        Der Key ist bereits eingetragen. Verwalte dein Kontingent unter:
+        <code>api-football.com → Dashboard → My Account</code>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ═══════════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-badges">
+    <div class="f-badge">KOSTENLOS</div>
+    <div class="f-badge">WM 2026</div>
+    <div class="f-badge">RATE-LIMIT SMART</div>
+    <div class="f-badge">4K READY</div>
+  </div>
+  <div class="footer-right">DAILYS FOOTJOB OVERLAY v2.0 — MADE FOR STREAMERS</div>
+</footer>
+
+<script>
+let generatedURL  = '';
+let currentFxId   = null;
+let currentFxList = [];
+
+// ── Init ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('dateInput').value = new Date().toISOString().slice(0,10);
+  scalePreview();
+  syncBadge();
+  updateTrack(document.getElementById('refreshSlider'));
+});
+window.addEventListener('resize', scalePreview);
+
+function el(id) { return document.getElementById(id); }
+
+function scalePreview() {
+  const inner = el('prevInner');
+  const frame = el('prevFrame');
+  const s     = Math.min(1, inner.clientWidth / 1280);
+  frame.style.transform = `scale(${s})`;
+  frame.style.transformOrigin = 'top left';
+  inner.style.height = Math.ceil(120 * s + 36) + 'px';
+}
+
+function updateTrack(input) {
+  const pct = ((input.value - input.min) / (input.max - input.min)) * 100;
+  input.style.background = `linear-gradient(to right, var(--purple) ${pct}%, var(--border3) ${pct}%)`;
+}
+
+// ── API Test ──────────────────────────────────────────────────────────────
+async function testKey() {
+  const key = el('apiKeyInput').value.trim();
+  if (!key) { setApiStatus('red', 'Kein API-Key eingegeben', ''); return; }
+  const btn = el('testBtn');
+  btn.textContent = '⏳ ...'; btn.disabled = true;
+
+  try {
+    const res  = await fetch('https://v3.football.api-sports.io/status', {
+      headers: { 'x-apisports-key': key }
+    });
+    const json = await res.json();
+
+    // Also read rate limit headers
+    const rl  = res.headers.get('x-ratelimit-requests-remaining');
+    const lim = res.headers.get('x-ratelimit-requests-limit');
+
+    if (json.errors && Object.keys(json.errors).length) {
+      setApiStatus('red', '✗ Ungültiger API-Key', Object.values(json.errors)[0]);
+    } else if (json.response) {
+      const r = json.response.requests;
+      const remaining = rl ?? r?.current ?? '?';
+      const limit     = lim ?? r?.limit_day ?? 100;
+      const detail    = `${100 - (r?.current ?? 0)} / ${limit} heute übrig`;
+      setApiStatus('purple', '✓ Verbunden', detail);
+      setHdr('purple', 'API VERBUNDEN');
+      showReqInfo(rl ? parseInt(rl) : (100 - (r?.current ?? 0)), limit);
+      localStorage.setItem('fbo_key', key);
+    }
+  } catch(e) {
+    setApiStatus('red', '✗ Verbindungsfehler', e.message);
+  }
+
+  btn.textContent = '🔌 TEST'; btn.disabled = false;
+}
+
+function setApiStatus(color, text, detail) {
+  const s   = el('apiStatus');
+  const led = el('apiLed');
+  led.className = 'led ' + color;
+  el('apiTxt').textContent    = text;
+  el('apiDetail').textContent = detail || '';
+  s.className = 'api-status' + (color === 'purple' ? ' ok' : color === 'red' ? ' err' : '');
+}
+
+function showReqInfo(remaining, limit) {
+  const ri  = el('reqInfo');
+  ri.style.display = 'block';
+  const warn = remaining <= 20 ? 'color:var(--amber)' : remaining <= 10 ? 'color:var(--red)' : '';
+  ri.innerHTML = `<span style="${warn}">◆ ${remaining}/${limit} Anfragen heute übrig</span>`;
+}
+
+function setHdr(color, text) {
+  el('hdrLed').className = 'led ' + color;
+  el('hdrTxt').textContent = text;
+}
+
+// ── Search Fixtures ────────────────────────────────────────────────────────
+async function searchFixtures() {
+  const key  = el('apiKeyInput').value.trim();
+  if (!key) { alert('Bitte erst API-Key testen!'); return; }
+
+  const rawLeague = el('leagueSelect').value;   // could be "1:2026" or "78"
+  const date      = el('dateInput').value;
+  let season      = el('seasonSelect').value;
+  let leagueId    = rawLeague;
+
+  // Handle "1:2026" format (league:season override)
+  if (rawLeague.includes(':')) {
+    const parts = rawLeague.split(':');
+    leagueId = parts[0];
+    season   = parts[1];
+  }
+
+  const btn = el('searchBtn');
+  btn.textContent = '⏳ ...'; btn.disabled = true;
+
+  try {
+    let url = `https://v3.football.api-sports.io/fixtures?season=${season}`;
+    if (leagueId) url += `&league=${leagueId}`;
+    if (date)     url += `&date=${date}`;
+    else          url += `&live=all`;
+
+    const res  = await fetch(url, { headers: { 'x-apisports-key': key } });
+    const json = await res.json();
+
+    // Update req counter
+    const rl = res.headers.get('x-ratelimit-requests-remaining');
+    if (rl) showReqInfo(parseInt(rl), 100);
+
+    if (json.errors && Object.keys(json.errors).length) {
+      alert('API Fehler: ' + Object.values(json.errors)[0]);
+    } else {
+      currentFxList = json.response || [];
+      populateFx(currentFxList);
+    }
+  } catch(e) { alert('Ladefehler: ' + e.message); }
+
+  btn.textContent = '🔍 LADEN'; btn.disabled = false;
+}
+
+function populateFx(fixtures) {
+  const sel = el('fixtureSelect');
+  sel.innerHTML = '';
+  if (!fixtures.length) {
+    sel.innerHTML = '<option>Keine Spiele gefunden</option>'; return;
+  }
+
+  const liveStates = ['1H','2H','ET','P','HT','BT'];
+  fixtures.sort((a, b) => {
+    const al = liveStates.includes(a.fixture.status.short) ? 0 : 1;
+    const bl = liveStates.includes(b.fixture.status.short) ? 0 : 1;
+    return al !== bl ? al - bl : a.fixture.date.localeCompare(b.fixture.date);
+  });
+
+  fixtures.forEach(f => {
+    const live  = liveStates.includes(f.fixture.status.short);
+    const hhmm  = new Date(f.fixture.date).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+    const score = (f.goals.home ?? '-') + ':' + (f.goals.away ?? '-');
+    const label = `${live ? '● LIVE' : '○ '+hhmm}  |  ${f.teams.home.name} ${score} ${f.teams.away.name}  [${f.league.name}]`;
+    sel.appendChild(new Option(label, f.fixture.id));
+  });
+
+  const live = fixtures.find(f => liveStates.includes(f.fixture.status.short));
+  if (live) sel.value = live.fixture.id;
+  onFixtureChange();
+}
+
+function onFixtureChange() {
+  currentFxId = el('fixtureSelect').value || null;
+}
+
+// ── Generate URL ───────────────────────────────────────────────────────────
+function generateURL() {
+  const key = el('apiKeyInput').value.trim();
+  const fxId = currentFxId || el('fixtureSelect').value;
+  if (!key)  { alert('Bitte API-Key eingeben!');  return; }
+  if (!fxId) { alert('Bitte Spiel auswählen!'); return; }
+
+  const params = new URLSearchParams({
+    fixture:       fxId,
+    apiKey:        key,
+    showAnimation: el('chk-anim').checked    ? '1':'0',
+    showCards:     el('chk-cards').checked   ? '1':'0',
+    showExtra:     el('chk-extra').checked   ? '1':'0',
+    showPenalty:   el('chk-penalty').checked ? '1':'0',
+    refresh:       el('refreshSlider').value,
+  });
+
+  const hc = el('homeCode').value.trim().toUpperCase();
+  const ac = el('awayCode').value.trim().toUpperCase();
+  if (hc) params.set('homeCode', hc);
+  if (ac) params.set('awayCode', ac);
+
+  const base = window.location.href.replace(/[^/]+\.html.*$/, 'overlay.html');
+  generatedURL = `${base}?${params.toString()}`;
+
+  el('urlTxt').textContent = generatedURL;
+  el('obsUrlShort').textContent = generatedURL.length > 48
+    ? generatedURL.substring(0,48) + '…'
+    : generatedURL;
+
+  el('urlBox').classList.add('visible');
+  el('prevFrame').src = generatedURL;
+  setHdr('purple', 'URL GENERIERT');
+}
+
+function copyURL() {
+  if (!generatedURL) return;
+  navigator.clipboard.writeText(generatedURL).then(() => {
+    const s = el('copyOk');
+    s.style.display = 'block';
+    setTimeout(() => { s.style.display = 'none'; }, 3000);
+  });
+}
+
+function openPreview() {
+  if (generatedURL) window.open(generatedURL, '_blank');
+}
+
+function resetAll() {
+  el('fixtureSelect').innerHTML = '<option value="">— Zuerst Spiele laden —</option>';
+  el('urlBox').classList.remove('visible');
+  el('prevFrame').src = 'overlay.html?demo=1';
+  el('homeCode').value = '';
+  el('awayCode').value = '';
+  el('obsUrlShort').textContent = '— noch nicht generiert —';
+  generatedURL = ''; currentFxId = null; currentFxList = [];
+  setHdr('', 'BEREIT');
+}
+
+// ── Badges & Options ───────────────────────────────────────────────────────
+function syncBadge() {
+  tog('fb-anim',  'chk-anim');
+  tog('fb-cards', 'chk-cards');
+  tog('fb-extra', 'chk-extra');
+  tog('fb-pen',   'chk-penalty');
+}
+function tog(bdId, chkId) {
+  const on = el(chkId).checked;
+  const b  = el(bdId);
+  b.classList.toggle('off', !on);
+  const c = b.querySelector('.fbadge-check');
+  if (c) c.textContent = on ? '✓' : ' ';
+}
+function syncOpt(chk, labelId) {
+  el(labelId).classList.toggle('active', chk.checked);
+}
+function scrollToOBS() {
+  el('obsSection').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+</script>
+</body>
+</html>

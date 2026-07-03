@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Dailys FootJob Overlay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: transparent;
+    font-family:'Oswald','Arial Black',sans-serif;
+    overflow: hidden;
+    width: 1280px;
+  }
+
+  .wrapper {
+    background: rgba(6,6,8,0.94);
+    border-bottom: 2px solid #1a1020;
+    position: relative;
+  }
+
+  /* ── Badges ── */
+  .badges {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 5px 18px;
+    background: rgba(0,0,0,0.55);
+    border-bottom: 1px solid #18101e;
+    font-size: 10.5px;
+    letter-spacing: 0.8px;
+  }
+
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #a855f7;
+    font-weight: 700;
+    font-family:'Rajdhani',sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .badge-dot {
+    width: 6px; height: 6px;
+    background: #a855f7;
+    border-radius: 50%;
+    animation: bdPulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes bdPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .status-chip {
+    margin-left: auto;
+    font-size: 10px;
+    font-family:'Rajdhani',sans-serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 2px 8px;
+    transition: all 0.3s;
+  }
+
+  .status-chip.live     { background:#a855f7; color:#000; }
+  .status-chip.halftime { background:#3b1f5a; color:#a855f7; border:1px solid #5b2d8a; }
+  .status-chip.finished { background:#1a1020; color:#555; border:1px solid #2a1840; }
+  .status-chip.upcoming { background:#1a1a30; color:#6666aa; border:1px solid #2a2a50; }
+
+  /* ── Scoreboard ── */
+  .scoreboard {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    min-height: 90px;
+  }
+
+  /* Timer */
+  .timer-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 100px;
+    background: #0d0a14;
+    border: 1px solid #221432;
+    padding: 8px 14px;
+    flex-shrink: 0;
+  }
+
+  .timer-main {
+    font-size: 34px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 3px;
+    font-family:'Oswald',monospace;
+    line-height: 1;
+  }
+
+  .timer-extra {
+    font-size: 12px;
+    font-family:'Rajdhani',sans-serif;
+    font-weight: 700;
+    color: #c084fc;
+    letter-spacing: 1px;
+    min-height: 14px;
+    margin-top: 2px;
+  }
+
+  /* Teams */
+  .team-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    padding: 0 18px;
+  }
+
+  .team-block.home { justify-content: flex-end; }
+  .team-block.away { justify-content: flex-start; }
+
+  .team-flag {
+    width: 44px;
+    height: 29px;
+    object-fit: cover;
+    border: 1px solid #2a1a3a;
+    flex-shrink: 0;
+  }
+  .team-flag.hidden { display: none; }
+
+  .team-name {
+    font-size: 34px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 4px;
+    font-family:'Oswald',sans-serif;
+    text-transform: uppercase;
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(168,85,247,0.12);
+  }
+
+  /* Score */
+  .score-block {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    padding: 0 12px;
+  }
+
+  .score-box {
+    background: #0d0a14;
+    border: 2px solid #221432;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .score-box.goal-flash {
+    animation: goalBoxPulse 2s ease-out;
+  }
+
+  @keyframes goalBoxPulse {
+    0%   { border-color:#a855f7; background:rgba(168,85,247,0.25); }
+    30%  { border-color:#c084fc; background:rgba(192,132,252,0.35); }
+    60%  { border-color:#a855f7; background:rgba(168,85,247,0.12); }
+    100% { border-color:#221432; background:#0d0a14; }
+  }
+
+  .score-val {
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    font-family:'Oswald',monospace;
+    line-height: 1;
+    transition: color 0.3s;
+  }
+
+  .score-val.goal-color { color: #a855f7; text-shadow: 0 0 12px rgba(168,85,247,0.8); }
+
+  .center-icon {
+    font-size: 28px;
+    line-height: 1;
+    filter: drop-shadow(0 0 6px rgba(168,85,247,0.4));
+  }
+
+  /* Scorers */
+  .scorers-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2px 18px 8px;
+    min-height: 20px;
+    gap: 20px;
+  }
+
+  .scorer-list {
+    font-size: 11px;
+    color: #887799;
+    font-family:'Rajdhani',sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    max-width: 45%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Penalty bar */
+  .penalty-bar {
+    display: none;
+    padding: 4px 18px 6px;
+    background: rgba(120,0,160,0.12);
+    border-top: 1px solid #3b0060;
+    text-align: center;
+    font-size: 12px;
+    font-family:'Rajdhani',sans-serif;
+    font-weight: 700;
+    color: #c084fc;
+    letter-spacing: 2px;
+  }
+  .penalty-bar.visible { display: block; }
+
+  /* Live dot */
+  .live-indicator {
+    position: absolute;
+    bottom: 6px;
+    right: 10px;
+  }
+
+  .live-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #333;
+    transition: background 0.3s;
+  }
+  .live-dot.active {
+    background: #a855f7;
+    animation: blink 1.4s ease-in-out infinite;
+    box-shadow: 0 0 8px #a855f7;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  /* Card popup */
+  .card-popup {
+    position: fixed;
+    top: 12px;
+    right: 14px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family:'Oswald',sans-serif;
+    letter-spacing: 1px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    z-index: 100;
+  }
+
+  .card-popup.yellow { background:#e6c200; color:#000; display:flex; }
+  .card-popup.red    { background:#cc0000; color:#fff; display:flex; }
+
+  @keyframes popIn  { from{transform:translateX(120px) scale(0.9);opacity:0} to{transform:translateX(0) scale(1);opacity:1} }
+  @keyframes popOut { to{transform:translateX(120px);opacity:0} }
+
+  .card-popup.show { animation:popIn  0.35s ease-out; }
+  .card-popup.hide { animation:popOut 0.4s  ease-in forwards; }
+
+  /* Screen flash for goals */
+  .goal-flash-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: rgba(168,85,247,0.0);
+    z-index: 50;
+  }
+  .goal-flash-overlay.flash {
+    animation: screenFlash 1.8s ease-out;
+  }
+  @keyframes screenFlash {
+    0%   { background:rgba(168,85,247,0.0); }
+    15%  { background:rgba(168,85,247,0.22); }
+    30%  { background:rgba(168,85,247,0.05); }
+    45%  { background:rgba(168,85,247,0.18); }
+    70%  { background:rgba(168,85,247,0.04); }
+    100% { background:rgba(168,85,247,0.0); }
+  }
+
+  /* Error / info bar */
+  .info-bar {
+    display: none;
+    padding: 4px 18px;
+    font-size: 10px;
+    font-family:'Rajdhani',sans-serif;
+    letter-spacing: 1px;
+  }
+  .info-bar.error   { background:rgba(100,0,0,0.35); border-top:1px solid #440000; color:#ff6666; display:block; }
+  .info-bar.warning { background:rgba(100,50,0,0.25); border-top:1px solid #442200; color:#ffaa44; display:block; }
+
+  /* Request counter (bottom right, tiny) */
+  .req-counter {
+    position: absolute;
+    bottom: 5px;
+    right: 22px;
+    font-family:'Rajdhani',sans-serif;
+    font-size: 9px;
+    color: #3a2050;
+    letter-spacing: 1px;
+    display: none;
+  }
+  .req-counter.visible { display: block; }
+  .req-counter.warn    { color: #664400; }
+  .req-counter.danger  { color: #660000; }
+</style>
+</head>
+<body>
+
+<div class="goal-flash-overlay" id="goalFlashOverlay"></div>
+
+<div class="wrapper" id="overlayWrapper">
+
+  <div class="badges" id="badgesBar">
+    <div class="badge"><div class="badge-dot"></div> LIVE SCORE</div>
+    <div class="badge"><div class="badge-dot"></div> SPIELZEIT</div>
+    <div class="badge" id="badgeAnim"    style="display:none"><div class="badge-dot"></div> TORE ANIMATION</div>
+    <div class="badge" id="badgeCards"   style="display:none"><div class="badge-dot"></div> KARTEN</div>
+    <div class="badge" id="badgeExtra"   style="display:none"><div class="badge-dot"></div> NACHSPIELZEIT</div>
+    <div class="badge" id="badgePenalty" style="display:none"><div class="badge-dot"></div> ELFMETERSCHIESSEN</div>
+    <div class="status-chip upcoming" id="statusChip">VERBINDEN...</div>
+  </div>
+
+  <div class="scoreboard">
+    <div class="timer-block">
+      <div class="timer-main" id="timerMain">--'</div>
+      <div class="timer-extra" id="timerExtra"></div>
+    </div>
+
+    <div class="team-block home">
+      <div class="team-name" id="homeTeamName">---</div>
+      <img class="team-flag hidden" id="homeFlag" src="" alt="">
+    </div>
+
+    <div class="score-block">
+      <div class="score-box" id="homeScoreBox">
+        <span class="score-val" id="homeScore">0</span>
+      </div>
+      <div class="center-icon" id="centerIcon">🏆</div>
+      <div class="score-box" id="awayScoreBox">
+        <span class="score-val" id="awayScore">0</span>
+      </div>
+    </div>
+
+    <div class="team-block away">
+      <img class="team-flag hidden" id="awayFlag" src="" alt="">
+      <div class="team-name" id="awayTeamName">---</div>
+    </div>
+
+    <div class="live-indicator">
+      <div class="live-dot" id="liveDot"></div>
+    </div>
+  </div>
+
+  <div class="scorers-bar">
+    <div class="scorer-list" id="homeScorers"></div>
+    <div class="scorer-list" id="awayScorers" style="text-align:right"></div>
+  </div>
+
+  <div class="penalty-bar" id="penaltyBar">
+    ⚽ ELFMETERSCHIESSEN &nbsp;—&nbsp;
+    <span id="homePenalty">0</span> : <span id="awayPenalty">0</span>
+  </div>
+
+  <div class="info-bar" id="infoBar"></div>
+
+  <div class="req-counter" id="reqCounter"></div>
+</div>
+
+<div class="card-popup" id="cardPopup"></div>
+
+<script>
+// ─── Config ───────────────────────────────────────────────────────────────
+const P = new URLSearchParams(window.location.search);
+const CFG = {
+  fixtureId:     P.get('fixture'),
+  apiKey:        P.get('apiKey') || '5b64c4de80bf8e61facd74ae73539a6a',
+  showCards:     P.get('showCards')     !== '0',
+  showAnimation: P.get('showAnimation') !== '0',
+  showExtra:     P.get('showExtra')     !== '0',
+  showPenalty:   P.get('showPenalty')   === '1',
+  refreshRate:   Math.max(60, parseInt(P.get('refresh') || '90')) * 1000,
+  homeCode:      P.get('homeCode')  || null,
+  awayCode:      P.get('awayCode')  || null,
+  homeCountry:   P.get('homeCountry') || null,
+  awayCountry:   P.get('awayCountry') || null,
+  trophy:        P.get('trophy')    || '🏆',
+  demo:          P.get('demo')      === '1',
+  apiHost:       'v3.football.api-sports.io',
+};
+
+// ─── State ────────────────────────────────────────────────────────────────
+let prevHomeGoals   = -1;
+let prevAwayGoals   = -1;
+let seenCardKeys    = new Set();
+let consecutiveErrs = 0;
+let requestsRemaining = null;
+let htSlowTimer = null;    // slower poll during HT
+let isFinished  = false;   // stop polling when FT
+let currentStatus = '';
+
+// Rate limit: 10/min, 100/day
+// Smart backoff: HT → 3min interval, FT → stop
+const HT_INTERVAL  = 3 * 60 * 1000;  // 3 min during halftime
+const LIVE_INTERVAL = CFG.refreshRate; // user-set (min 60s)
+
+// ─── Boot ─────────────────────────────────────────────────────────────────
+function boot() {
+  el('centerIcon').textContent = CFG.trophy;
+  if (CFG.showAnimation) showEl('badgeAnim');
+  if (CFG.showCards)     showEl('badgeCards');
+  if (CFG.showExtra)     showEl('badgeExtra');
+  if (CFG.showPenalty)   showEl('badgePenalty');
+
+  if (CFG.demo) { loadDemo(); return; }
+  if (!CFG.fixtureId) { setChip('upcoming', 'KEIN FIXTURE'); return; }
+
+  fetchData();
+  scheduleNext(LIVE_INTERVAL);
+}
+
+// ─── Smart Scheduler ──────────────────────────────────────────────────────
+let nextTimer = null;
+
+function scheduleNext(delay) {
+  clearTimeout(nextTimer);
+  if (isFinished) return;
+  nextTimer = setTimeout(() => {
+    fetchData();
+    // Re-schedule based on current match status after data comes in
+    const interval = currentStatus === 'HT' ? HT_INTERVAL : LIVE_INTERVAL;
+    scheduleNext(interval);
+  }, delay);
+}
+
+// ─── Fetch ────────────────────────────────────────────────────────────────
+async function fetchData() {
+  try {
+    const res  = await fetch(`https://${CFG.apiHost}/fixtures?id=${CFG.fixtureId}`, {
+      headers: { 'x-apisports-key': CFG.apiKey }
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    // Track remaining requests from headers
+    const rl = res.headers.get('x-ratelimit-requests-remaining');
+    if (rl !== null) {
+      requestsRemaining = parseInt(rl);
+      updateReqCounter(requestsRemaining);
+    }
+
+    const json = await res.json();
+    if (!json.response?.length) throw new Error('No data');
+
+    consecutiveErrs = 0;
+    hideInfoBar();
+    renderFixture(json.response[0]);
+
+  } catch(e) {
+    consecutiveErrs++;
+    console.warn('[overlay] fetch error:', e.message);
+    if (consecutiveErrs >= 2) {
+      showInfoBar('error', `⚠ Verbindung unterbrochen — letzte Daten aktiv (${e.message})`);
+    }
+    el('liveDot').className = 'live-dot';
+  }
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────
+function renderFixture(data) {
+  const { fixture, teams, goals, score, events = [] } = data;
+  const status = fixture.status;
+  currentStatus = status.short;
+
+  // Stop polling on finished states
+  if (['FT','AET','PEN','AWD','WO','CANC','PST'].includes(status.short)) {
+    isFinished = true;
+    clearTimeout(nextTimer);
+  }
+
+  // Teams
+  const homeName = teams.home.name;
+  const awayName = teams.away.name;
+  el('homeTeamName').textContent = CFG.homeCode || abbrev(homeName);
+  el('awayTeamName').textContent = CFG.awayCode || abbrev(awayName);
+
+  // Flags
+  setFlag('homeFlag', CFG.homeCountry || teams.home.country);
+  setFlag('awayFlag', CFG.awayCountry || teams.away.country);
+
+  // Scores + animation
+  const hg = goals.home ?? 0;
+  const ag = goals.away ?? 0;
+  if (prevHomeGoals >= 0 && hg > prevHomeGoals && CFG.showAnimation) triggerGoal('home');
+  if (prevAwayGoals >= 0 && ag > prevAwayGoals && CFG.showAnimation) triggerGoal('away');
+  prevHomeGoals = hg;
+  prevAwayGoals = ag;
+
+  el('homeScore').textContent = hg;
+  el('awayScore').textContent = ag;
+
+  // Timer
+  renderTimer(status);
+
+  // Scorers
+  renderScorers(events, homeName, awayName);
+
+  // Cards
+  if (CFG.showCards) detectCards(events);
+
+  // Penalty
+  if (CFG.showPenalty && score.penalty?.home != null) {
+    el('homePenalty').textContent = score.penalty.home ?? 0;
+    el('awayPenalty').textContent = score.penalty.away ?? 0;
+    el('penaltyBar').classList.add('visible');
+  }
+
+  // Status chip + live dot
+  const short = status.short;
+  const liveStates = ['1H','2H','ET','P','BT','INT'];
+  if (liveStates.includes(short)) {
+    setChip('live', 'LIVE');
+    el('liveDot').className = 'live-dot active';
+  } else if (short === 'HT') {
+    setChip('halftime', 'HALBZEIT');
+    el('liveDot').className = 'live-dot';
+    // Warn that next update is in 3 min
+    showInfoBar('warning', '⏸ Halbzeit — nächstes Update in 3 Min.');
+  } else if (['FT','AET','PEN'].includes(short)) {
+    setChip('finished', 'ABPFIFF');
+    el('liveDot').className = 'live-dot';
+  } else {
+    setChip('upcoming', 'WARTET');
+    el('liveDot').className = 'live-dot';
+  }
+}
+
+function renderTimer(status) {
+  const { elapsed, short } = status;
+  const tMain = el('timerMain');
+  const tExt  = el('timerExtra');
+  tExt.textContent = '';
+
+  if (short === 'HT') {
+    tMain.textContent = "45'";
+    if (CFG.showExtra) tExt.textContent = 'HT';
+    return;
+  }
+  if (['FT','AET','PEN'].includes(short)) {
+    tMain.textContent = "90'";
+    if (CFG.showExtra) tExt.textContent = short;
+    return;
+  }
+  if (['NS','TBD','PST','CANC'].includes(short)) {
+    tMain.textContent = "--'";
+    return;
+  }
+  if (elapsed != null) {
+    if (CFG.showExtra) {
+      if (short === '1H' && elapsed > 45) {
+        tMain.textContent = "45'";
+        tExt.textContent = `+${elapsed - 45}`;
+      } else if (short === '2H' && elapsed > 90) {
+        tMain.textContent = "90'";
+        tExt.textContent = `+${elapsed - 90}`;
+      } else if (short === 'ET' && elapsed > 120) {
+        tMain.textContent = "120'";
+        tExt.textContent = `+${elapsed - 120}`;
+      } else {
+        tMain.textContent = `${elapsed}'`;
+      }
+    } else {
+      const cap = short === '1H' ? 45 : short === '2H' ? 90 : elapsed;
+      tMain.textContent = `${Math.min(elapsed, cap)}'`;
+    }
+  }
+}
+
+function renderScorers(events, homeName, awayName) {
+  const homeGoals = events
+    .filter(e => e.type === 'Goal' && e.team.name === homeName && e.detail !== 'Missed Penalty')
+    .map(e => `⚽ ${lastName(e.player.name)} ${e.time.elapsed}'`);
+
+  const awayGoals = events
+    .filter(e => e.type === 'Goal' && e.team.name === awayName && e.detail !== 'Missed Penalty')
+    .map(e => `⚽ ${lastName(e.player.name)} ${e.time.elapsed}'`);
+
+  el('homeScorers').textContent = homeGoals.join('  ·  ');
+  el('awayScorers').textContent = awayGoals.join('  ·  ');
+}
+
+function detectCards(events) {
+  events.filter(e => e.type === 'Card').forEach(e => {
+    const key = `${e.time.elapsed}-${e.player.name}-${e.detail}`;
+    if (!seenCardKeys.has(key)) {
+      seenCardKeys.add(key);
+      showCardPopup(e.detail, e.player.name, e.team.name);
+    }
+  });
+}
+
+// ─── Animations ───────────────────────────────────────────────────────────
+function triggerGoal(side) {
+  const box = el(side === 'home' ? 'homeScoreBox' : 'awayScoreBox');
+  const sc  = el(side === 'home' ? 'homeScore'    : 'awayScore');
+
+  box.classList.remove('goal-flash');
+  void box.offsetWidth;
+  box.classList.add('goal-flash');
+  setTimeout(() => box.classList.remove('goal-flash'), 2200);
+
+  sc.classList.add('goal-color');
+  setTimeout(() => sc.classList.remove('goal-color'), 2500);
+
+  const flash = el('goalFlashOverlay');
+  flash.classList.remove('flash');
+  void flash.offsetWidth;
+  flash.classList.add('flash');
+  setTimeout(() => flash.classList.remove('flash'), 1900);
+}
+
+function showCardPopup(type, player, team) {
+  const popup  = el('cardPopup');
+  const yellow = type.toLowerCase().includes('yellow');
+  const red    = type.toLowerCase().includes('red');
+
+  popup.className = 'card-popup show ' + (yellow ? 'yellow' : red ? 'red' : 'yellow');
+  popup.innerHTML = `${yellow ? '🟨' : '🟥'}&nbsp;${lastName(player)} <small style="opacity:0.7;font-size:11px">(${abbrev(team)})</small>`;
+  popup.style.display = 'flex';
+
+  setTimeout(() => {
+    popup.classList.replace('show', 'hide');
+    setTimeout(() => { popup.style.display = 'none'; popup.className = 'card-popup'; }, 450);
+  }, 5000);
+}
+
+// ─── Request counter ──────────────────────────────────────────────────────
+function updateReqCounter(remaining) {
+  const rc = el('reqCounter');
+  rc.classList.add('visible');
+  rc.textContent = `API ${remaining}/100`;
+  if (remaining <= 10) rc.className = 'req-counter visible danger';
+  else if (remaining <= 30) rc.className = 'req-counter visible warn';
+  else rc.className = 'req-counter visible';
+}
+
+// ─── Info bar ─────────────────────────────────────────────────────────────
+function showInfoBar(type, msg) {
+  const b = el('infoBar');
+  b.className = 'info-bar ' + type;
+  b.textContent = msg;
+}
+function hideInfoBar() {
+  el('infoBar').className = 'info-bar';
+}
+
+// ─── Demo ────────────────────────────────────────────────────────────────
+function loadDemo() {
+  el('homeTeamName').textContent = 'USA';
+  el('awayTeamName').textContent = 'GER';
+  el('homeScore').textContent    = '2';
+  el('awayScore').textContent    = '1';
+  el('timerMain').textContent    = "67'";
+  el('homeScorers').textContent  = "⚽ Pulisic 23'  ·  ⚽ Adams 55'";
+  el('awayScorers').textContent  = "⚽ Müller 38'";
+  const hf = el('homeFlag');
+  const af = el('awayFlag');
+  hf.src = 'https://flagcdn.com/w40/us.png'; hf.classList.remove('hidden');
+  af.src = 'https://flagcdn.com/w40/de.png'; af.classList.remove('hidden');
+  el('liveDot').className = 'live-dot active';
+  setChip('live', 'WM 2026 LIVE');
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────
+function setFlag(id, country) {
+  if (!country) return;
+  const code = countryToCode(country);
+  if (!code) return;
+  const img = el(id);
+  img.src = `https://flagcdn.com/w40/${code}.png`;
+  img.classList.remove('hidden');
+  img.onerror = () => img.classList.add('hidden');
+}
+
+function setChip(cls, text) {
+  const c = el('statusChip');
+  c.className = 'status-chip ' + cls;
+  c.textContent = text;
+}
+
+function showEl(id) { const e = el(id); if(e) e.style.display='flex'; }
+function el(id)     { return document.getElementById(id); }
+function lastName(n){ if(!n) return ''; const p=n.trim().split(' '); return p[p.length-1]; }
+
+function abbrev(name) {
+  const k = ABBREVS[name];
+  if (k) return k;
+  const w = name.trim().split(/\s+/);
+  if (w.length === 1) return name.substring(0,3).toUpperCase();
+  return (w[0].substring(0,1) + w[1].substring(0,2)).toUpperCase();
+}
+
+const ABBREVS = {
+  'Portugal':'POR','Croatia':'CRO','Germany':'GER','France':'FRA','Spain':'ESP',
+  'England':'ENG','Brazil':'BRA','Argentina':'ARG','Italy':'ITA','Netherlands':'NED',
+  'Belgium':'BEL','Uruguay':'URU','Poland':'POL','Denmark':'DEN','Switzerland':'SUI',
+  'Austria':'AUT','Sweden':'SWE','Norway':'NOR','Turkey':'TUR','Greece':'GRE',
+  'Serbia':'SRB','Ukraine':'UKR','Japan':'JPN','South Korea':'KOR','Mexico':'MEX',
+  'United States':'USA','USA':'USA','Canada':'CAN','Morocco':'MAR','Senegal':'SEN',
+  'Ghana':'GHA','Australia':'AUS','Wales':'WAL','Scotland':'SCO','Ireland':'IRL',
+  'Czech Republic':'CZE','Slovakia':'SVK','Albania':'ALB','Slovenia':'SVN',
+  'Georgia':'GEO','Chile':'CHI','Colombia':'COL','Ecuador':'ECU','Peru':'PER',
+  'Romania':'ROU','Hungary':'HUN','Iran':'IRN','Saudi Arabia':'KSA','Qatar':'QAT',
+  'Tunisia':'TUN','Egypt':'EGY','Nigeria':'NGA','Cameroon':'CMR','Costa Rica':'CRC',
+  'Real Madrid':'RMA','Barcelona':'BAR','Bayern Munich':'BAY','Manchester City':'MCI',
+  'Manchester United':'MUN','Liverpool':'LIV','Chelsea':'CHE','Arsenal':'ARS',
+  'Tottenham Hotspur':'TOT','Juventus':'JUV','AC Milan':'ACM','Inter':'INT',
+  'Napoli':'NAP','Paris Saint Germain':'PSG','Borussia Dortmund':'BVB',
+  'Bayer Leverkusen':'B04','RB Leipzig':'RBL','Atletico Madrid':'ATM',
+};
+
+function countryToCode(c) {
+  const m = {
+    'Portugal':'pt','Croatia':'hr','Germany':'de','France':'fr','Spain':'es',
+    'England':'gb-eng','Brazil':'br','Argentina':'ar','Italy':'it','Netherlands':'nl',
+    'Belgium':'be','Uruguay':'uy','Poland':'pl','Denmark':'dk','Switzerland':'ch',
+    'Austria':'at','Czech Republic':'cz','Sweden':'se','Norway':'no','Finland':'fi',
+    'Turkey':'tr','Greece':'gr','Romania':'ro','Hungary':'hu','Serbia':'rs',
+    'Ukraine':'ua','Russia':'ru','Japan':'jp','South Korea':'kr','Mexico':'mx',
+    'United States':'us','USA':'us','Canada':'ca','Morocco':'ma','Senegal':'sn',
+    'Ghana':'gh','Cameroon':'cm','Australia':'au','Ecuador':'ec','Wales':'gb-wls',
+    'Scotland':'gb-sct','Ireland':'ie','Slovakia':'sk','Albania':'al','Slovenia':'si',
+    'Kosovo':'xk','Iceland':'is','Georgia':'ge','Chile':'cl','Colombia':'co',
+    'Peru':'pe','Bolivia':'bo','Paraguay':'py','Venezuela':'ve','Iran':'ir',
+    'Saudi Arabia':'sa','Qatar':'qa','Tunisia':'tn','Egypt':'eg','Nigeria':'ng',
+    'Costa Rica':'cr','Panama':'pa','Honduras':'hn','North Macedonia':'mk',
+    'Montenegro':'me','Bosnia':'ba','Bulgaria':'bg','New Zealand':'nz',
+    'Cuba':'cu','Guatemala':'gt','Jamaica':'jm','Trinidad and Tobago':'tt',
+  };
+  return m[c] || null;
+}
+
+boot();
+</script>
+</body>
+</html>
