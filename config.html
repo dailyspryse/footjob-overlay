@@ -267,7 +267,55 @@ body::after{content:'';position:fixed;top:-100px;left:50%;transform:translateX(-
   .bot-panel{border-right:none;border-bottom:1px solid var(--border);}
   .frow{grid-template-columns:1fr;}
   .opts-grid{grid-template-columns:1fr;}
+  .cust-grid{grid-template-columns:1fr 1fr;}
+  .cust-panel{border-right:none;border-bottom:1px solid var(--border);}
+  .presets-row{flex-wrap:wrap;}
 }
+
+/* ── Customizer ── */
+.cust-section{background:var(--panel2);background-image:var(--carbon);border-bottom:2px solid var(--border2);}
+.cust-top{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:var(--panel3);border-bottom:1px solid var(--border2);}
+.cust-top-left{display:flex;align-items:center;gap:10px;}
+
+.presets-row{display:flex;align-items:center;gap:6px;padding:12px 18px;background:var(--panel3);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.presets-label{font-family:var(--mono);font-size:9px;letter-spacing:2.5px;color:var(--text3);text-transform:uppercase;white-space:nowrap;margin-right:4px;}
+.preset-btn{font-family:var(--display);font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;border:1px solid var(--border2);background:transparent;color:var(--text3);padding:5px 12px;cursor:pointer;transition:all 0.15s;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);}
+.preset-btn:hover{color:var(--text);border-color:var(--border3);}
+.preset-btn.active{color:var(--purple);border-color:rgba(168,85,247,0.5);background:var(--purple-trace);}
+
+.cust-grid{display:grid;grid-template-columns:repeat(4,1fr);}
+.cust-panel{border-right:1px solid var(--border);overflow:hidden;}
+.cust-panel:last-child{border-right:none;}
+
+/* Color control */
+.color-row{display:flex;align-items:center;gap:9px;margin-bottom:10px;padding:8px 10px;background:var(--panel3);border:1px solid var(--border);}
+.color-swatch-wrap{position:relative;flex-shrink:0;}
+.color-swatch{width:28px;height:28px;border:1px solid var(--border2);cursor:pointer;display:block;transition:border-color 0.15s;}
+.color-swatch:hover{border-color:var(--purple);}
+input[type=color]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.color-info{flex:1;min-width:0;}
+.color-lbl{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:2px;}
+.color-hex-val{font-family:var(--mono);font-size:11px;color:var(--text);letter-spacing:1px;}
+
+/* Slider control */
+.slider-item{margin-bottom:10px;}
+.slider-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.slider-lbl{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;}
+.slider-val{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--purple);}
+.cust-range{width:100%;height:2px;appearance:none;outline:none;cursor:pointer;background:var(--border3);}
+.cust-range::-webkit-slider-thumb{appearance:none;width:10px;height:10px;background:var(--purple);cursor:pointer;transform:rotate(45deg);box-shadow:0 0 6px rgba(168,85,247,0.5);}
+
+/* Toggle row in customizer */
+.ctog-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--panel3);border:1px solid var(--border);border-left:2px solid var(--border2);cursor:pointer;font-family:var(--ui);font-size:12px;font-weight:600;color:var(--text2);user-select:none;transition:all 0.15s;margin-bottom:5px;}
+.ctog-item:hover{background:rgba(168,85,247,0.03);}
+.ctog-item.active{border-left-color:var(--purple);color:var(--text);background:rgba(168,85,247,0.05);}
+.ctog-item input[type=checkbox]{appearance:none;width:13px;height:13px;border:1px solid var(--border3);background:var(--panel3);cursor:pointer;position:relative;flex-shrink:0;transition:all 0.15s;}
+.ctog-item input[type=checkbox]:checked{background:var(--purple);border-color:var(--purple);}
+.ctog-item input[type=checkbox]:checked::after{content:'';position:absolute;left:3px;top:1px;width:5px;height:7px;border:1.5px solid #000;border-top:none;border-left:none;transform:rotate(45deg);}
+
+/* Live update indicator */
+.live-update-badge{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--purple);display:flex;align-items:center;gap:5px;opacity:0;transition:opacity 0.3s;}
+.live-update-badge.show{opacity:1;}
 </style>
 </head>
 <body>
@@ -476,11 +524,11 @@ body::after{content:'';position:fixed;top:-100px;left:50%;transform:translateX(-
 
         <div class="refresh-row">
           <label>REFRESH</label>
-          <input type="range" id="refreshSlider" min="30" max="120" step="10" value="60"
-            oninput="el('refreshVal').textContent=this.value+'s'; updateTrack(this)">
-          <span class="refresh-val" id="refreshVal">60s</span>
+          <input type="range" id="refreshSlider" min="5" max="120" step="5" value="30"
+            oninput="el('refreshVal').textContent=this.value+'s'; updateTrack(this); syncRefreshSliders(this,'refreshVal')">
+          <span class="refresh-val" id="refreshVal">30s</span>
         </div>
-        <div class="refresh-hint">ESPN API: keine offiziellen Rate Limits — 30s-60s empfohlen</div>
+        <div class="refresh-hint">ESPN API: keine offiziellen Rate Limits — min. 5s möglich, 15s-30s empfohlen</div>
       </div>
 
       <button class="btn btn-primary btn-block" onclick="generateURL()">
@@ -577,6 +625,164 @@ body::after{content:'';position:fixed;top:-100px;left:50%;transform:translateX(-
 
 </div>
 
+<!-- CUSTOMIZER -->
+<div class="sec-rule">
+  <div class="sec-diamond"></div>
+  <div class="sec-label">VISUAL CUSTOMIZER — LIVE PREVIEW</div>
+  <div class="sec-line"></div>
+  <div class="live-update-badge" id="liveUpdateBadge"><div class="led purple" style="width:5px;height:5px"></div>LIVE</div>
+</div>
+
+<div class="cust-section">
+  <!-- Preset buttons -->
+  <div class="presets-row">
+    <span class="presets-label">PRESETS</span>
+    <button class="preset-btn active" id="preset-default" onclick="applyPreset('default')">DEFAULT</button>
+    <button class="preset-btn" id="preset-minimal"  onclick="applyPreset('minimal')">MINIMAL</button>
+    <button class="preset-btn" id="preset-dark"     onclick="applyPreset('dark')">DARK BG</button>
+    <button class="preset-btn" id="preset-ghost"    onclick="applyPreset('ghost')">GHOST</button>
+    <button class="preset-btn" id="preset-neon"     onclick="applyPreset('neon')">NEON GREEN</button>
+    <button class="preset-btn" id="preset-red"      onclick="applyPreset('red')">TEAM RED</button>
+    <button class="preset-btn" id="preset-blue"     onclick="applyPreset('blue')">TEAM BLUE</button>
+    <button class="preset-btn" id="preset-gold"     onclick="applyPreset('gold')">GOLD</button>
+  </div>
+
+  <!-- 4-column customizer -->
+  <div class="cust-grid">
+
+    <!-- FARBEN -->
+    <div class="cust-panel">
+      <div class="p-head"><span class="p-num">A</span><span class="p-title">FARBEN</span></div>
+      <div class="p-body">
+        <div class="color-row">
+          <div class="color-swatch-wrap">
+            <div class="color-swatch" id="swatchAccent" style="background:#a855f7"></div>
+            <input type="color" id="colorAccent" value="#a855f7" oninput="onColorAccent(this)">
+          </div>
+          <div class="color-info">
+            <div class="color-lbl">AKZENTFARBE</div>
+            <div class="color-hex-val" id="hexAccent">#a855f7</div>
+          </div>
+        </div>
+        <div class="color-row">
+          <div class="color-swatch-wrap">
+            <div class="color-swatch" id="swatchBg" style="background:#060608"></div>
+            <input type="color" id="colorBg" value="#060608" oninput="onColorBg(this)">
+          </div>
+          <div class="color-info">
+            <div class="color-lbl">HINTERGRUNDFARBE</div>
+            <div class="color-hex-val" id="hexBg">#060608</div>
+          </div>
+        </div>
+
+        <div class="slider-item">
+          <div class="slider-header">
+            <span class="slider-lbl">TRANSPARENZ</span>
+            <span class="slider-val" id="val-bgOp">94%</span>
+          </div>
+          <input type="range" class="cust-range" id="sl-bgOp" min="0" max="100" value="94"
+            oninput="onSlider(this,'val-bgOp','%'); liveUpdate()">
+        </div>
+      </div>
+    </div>
+
+    <!-- GRÖSSEN -->
+    <div class="cust-panel">
+      <div class="p-head"><span class="p-num">B</span><span class="p-title">GRÖSSEN</span></div>
+      <div class="p-body">
+        <div class="slider-item">
+          <div class="slider-header">
+            <span class="slider-lbl">SCORE SCHRIFT</span>
+            <span class="slider-val" id="val-scoreSize">36px</span>
+          </div>
+          <input type="range" class="cust-range" id="sl-scoreSize" min="22" max="70" value="36"
+            oninput="onSlider(this,'val-scoreSize','px'); liveUpdate()">
+        </div>
+        <div class="slider-item">
+          <div class="slider-header">
+            <span class="slider-lbl">TEAMNAME SCHRIFT</span>
+            <span class="slider-val" id="val-teamSize">34px</span>
+          </div>
+          <input type="range" class="cust-range" id="sl-teamSize" min="14" max="60" value="34"
+            oninput="onSlider(this,'val-teamSize','px'); liveUpdate()">
+        </div>
+        <div class="slider-item">
+          <div class="slider-header">
+            <span class="slider-lbl">TIMER SCHRIFT</span>
+            <span class="slider-val" id="val-timerSize">34px</span>
+          </div>
+          <input type="range" class="cust-range" id="sl-timerSize" min="14" max="60" value="34"
+            oninput="onSlider(this,'val-timerSize','px'); liveUpdate()">
+        </div>
+        <div class="slider-item">
+          <div class="slider-header">
+            <span class="slider-lbl">SCORE BOX BREITE</span>
+            <span class="slider-val" id="val-scoreBoxW">auto</span>
+          </div>
+          <input type="range" class="cust-range" id="sl-scoreBoxW" min="0" max="120" value="0"
+            oninput="onSliderBoxW(this); liveUpdate()">
+        </div>
+      </div>
+    </div>
+
+    <!-- ELEMENTE -->
+    <div class="cust-panel">
+      <div class="p-head"><span class="p-num">C</span><span class="p-title">ELEMENTE</span></div>
+      <div class="p-body">
+        <label class="ctog-item active" id="ct-badges">
+          <input type="checkbox" id="cchk-badges" checked onchange="syncCtog(this,'ct-badges');liveUpdate()">
+          Badge-Leiste oben
+        </label>
+        <label class="ctog-item active" id="ct-scorers">
+          <input type="checkbox" id="cchk-scorers" checked onchange="syncCtog(this,'ct-scorers');liveUpdate()">
+          Torschützen-Leiste
+        </label>
+        <label class="ctog-item active" id="ct-flags">
+          <input type="checkbox" id="cchk-flags" checked onchange="syncCtog(this,'ct-flags');liveUpdate()">
+          Team-Flaggen
+        </label>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+          <div class="fsec-label">VORSCHAU</div>
+          <button class="btn btn-ghost btn-sm btn-block" onclick="refreshPreview()" style="margin-top:6px">
+            <svg class="icon" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
+            PREVIEW NEU LADEN
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ERWEITERT -->
+    <div class="cust-panel">
+      <div class="p-head"><span class="p-num">D</span><span class="p-title">ERWEITERT</span></div>
+      <div class="p-body">
+        <div class="notice" style="margin-bottom:10px">
+          <div class="nh" style="font-size:10px">
+            <svg class="icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            LIVE PREVIEW
+          </div>
+          Alle Änderungen aktualisieren die Vorschau oben automatisch innerhalb von 400ms.
+        </div>
+        <div class="notice warn">
+          <div class="nh" style="font-size:10px">
+            <svg class="icon-sm" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            REFRESH RATE
+          </div>
+          ESPN API hat keine offiziellen Rate Limits. Min. 5s möglich — 15s-30s empfohlen.
+        </div>
+        <div class="slider-item" style="margin-top:10px">
+          <div class="slider-header">
+            <span class="slider-lbl">REFRESH RATE</span>
+            <span class="slider-val" id="val-refresh2">30s</span>
+          </div>
+          <input type="range" class="cust-range" id="sl-refresh2" min="5" max="120" step="5" value="30"
+            oninput="syncRefreshSliders(this,'val-refresh2')">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- SECTION RULE -->
 <div class="sec-rule" id="obsSection">
   <div class="sec-diamond"></div>
@@ -669,19 +875,25 @@ let generatedURL  = '';
 let currentFxId   = null;
 let currentFxList = [];
 let currentLeague = 'FIFA.WORLD';
+let previewTimer  = null;
 
 const ESPN_BASE = 'https://site.api.espn.com/apis/site/v2/sports/soccer';
 
 function el(id) { return document.getElementById(id); }
 
-// Init
+// ── Init ──────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   el('dateInput').value = new Date().toISOString().slice(0,10);
   scalePreview();
   syncBadge();
   updateTrack(el('refreshSlider'));
+  initRanges();
 });
 window.addEventListener('resize', scalePreview);
+
+function initRanges() {
+  document.querySelectorAll('.cust-range').forEach(r => updateCustTrack(r));
+}
 
 function scalePreview() {
   const inner = el('prevInner');
@@ -696,129 +908,141 @@ function updateTrack(input) {
   const pct = ((input.value - input.min) / (input.max - input.min)) * 100;
   input.style.background = `linear-gradient(to right, var(--purple) ${pct}%, var(--border3) ${pct}%)`;
 }
+function updateCustTrack(input) {
+  const pct = ((input.value - input.min) / (input.max - input.min)) * 100;
+  input.style.background = `linear-gradient(to right, var(--purple) ${pct}%, var(--border3) ${pct}%)`;
+}
 
-// Search via ESPN
+// ── Search via ESPN ────────────────────────────────────────────────────────
 async function searchFixtures() {
   const league  = el('leagueSelect').value;
   const dateRaw = el('dateInput').value;
-
   if (!league) { showErr('Bitte Wettbewerb auswählen.'); return; }
-
   const btn = el('searchBtn');
-  btn.disabled = true;
-  btn.style.opacity = '0.5';
-  clearErr();
-
+  btn.disabled = true; btn.style.opacity = '0.5'; clearErr();
   try {
     const dateEspn = dateRaw.replace(/-/g, '');
-    const url = `${ESPN_BASE}/${league}/scoreboard?dates=${dateEspn}`;
-    const res = await fetch(url);
-
+    const res = await fetch(`${ESPN_BASE}/${league}/scoreboard?dates=${dateEspn}`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = await res.json();
-
     currentLeague = league;
     currentFxList = json.events || [];
     populateFx(currentFxList);
-
-    if (!currentFxList.length) {
-      showErr(`Keine Spiele gefunden für ${dateRaw}.\nVersuche ein anderes Datum oder eine andere Liga.`);
-    }
+    if (!currentFxList.length) showErr(`Keine Spiele gefunden für ${dateRaw}.\nVersuche ein anderes Datum oder eine andere Liga.`);
   } catch(e) {
-    showErr(`Verbindungsfehler: ${e.message}\nPrüfe Internetverbindung oder versuche es erneut.`);
+    showErr(`Verbindungsfehler: ${e.message}`);
   }
-
-  btn.disabled = false;
-  btn.style.opacity = '';
+  btn.disabled = false; btn.style.opacity = '';
 }
 
 function populateFx(events) {
   const sel = el('fixtureSelect');
   sel.innerHTML = '';
-
-  if (!events.length) {
-    sel.innerHTML = '<option>Keine Spiele gefunden</option>';
-    return;
-  }
-
-  // Sort: live first
-  const liveStates = ['in'];
+  if (!events.length) { sel.innerHTML = '<option>Keine Spiele gefunden</option>'; return; }
   events.sort((a, b) => {
     const al = a.status?.type?.state === 'in' ? 0 : 1;
     const bl = b.status?.type?.state === 'in' ? 0 : 1;
     return al !== bl ? al - bl : (a.date || '').localeCompare(b.date || '');
   });
-
   events.forEach(e => {
-    const comp  = e.competitions?.[0];
-    const home  = comp?.competitors?.find(c => c.homeAway === 'home');
-    const away  = comp?.competitors?.find(c => c.homeAway === 'away');
+    const comp = e.competitions?.[0];
+    const home = comp?.competitors?.find(c => c.homeAway === 'home');
+    const away = comp?.competitors?.find(c => c.homeAway === 'away');
     if (!home || !away) return;
-
-    const state  = e.status?.type?.state;
+    const isLive = e.status?.type?.state === 'in';
     const detail = e.status?.type?.shortDetail || '';
-    const isLive = state === 'in';
-    const hg     = home.score ?? '-';
-    const ag     = away.score ?? '-';
-    const time   = new Date(e.date).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
-
+    const hg = home.score ?? '-'; const ag = away.score ?? '-';
+    const time = new Date(e.date).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
     const label = `${isLive ? '● LIVE ' + detail : '○ ' + time}  |  ${home.team.abbreviation} ${hg} - ${ag} ${away.team.abbreviation}  [${e.name || ''}]`;
     sel.appendChild(new Option(label, e.id));
   });
-
-  // Auto-select first live game
   const live = events.find(e => e.status?.type?.state === 'in');
   if (live) sel.value = live.id;
   onFixtureChange();
 }
 
-function onFixtureChange() {
-  currentFxId = el('fixtureSelect').value || null;
-}
+function onFixtureChange() { currentFxId = el('fixtureSelect').value || null; }
+function showErr(msg) { const b = el('searchErr'); b.textContent = msg; b.style.display = 'block'; }
+function clearErr()   { el('searchErr').style.display = 'none'; }
 
-function showErr(msg) {
-  const b = el('searchErr');
-  b.textContent = msg;
-  b.style.display = 'block';
-}
-function clearErr() {
-  el('searchErr').style.display = 'none';
-}
-
-// Generate URL
-function generateURL() {
-  const fxId = currentFxId || el('fixtureSelect').value;
-  const league = currentLeague || el('leagueSelect').value;
-
-  if (!fxId)   { alert('Bitte erst Spiele laden und ein Spiel auswählen!'); return; }
-  if (!league) { alert('Bitte Wettbewerb auswählen!'); return; }
+// ── Build URL (shared for generate + live preview) ─────────────────────────
+function buildOverlayURL(demo) {
+  const fxId   = demo ? null : (currentFxId || el('fixtureSelect').value || null);
+  const league = demo ? 'FIFA.WORLD' : (currentLeague || el('leagueSelect').value);
 
   const params = new URLSearchParams({
     league:        league,
-    eventId:       fxId,
     showAnimation: el('chk-anim').checked    ? '1':'0',
     showCards:     el('chk-cards').checked   ? '1':'0',
     showExtra:     el('chk-extra').checked   ? '1':'0',
     showPenalty:   el('chk-penalty').checked ? '1':'0',
-    refresh:       el('refreshSlider').value,
+    refresh:       el('sl-refresh2')?.value || el('refreshSlider').value,
   });
+
+  if (demo)  { params.set('demo', '1'); }
+  if (fxId)    params.set('eventId', fxId);
 
   const hc = el('homeCode').value.trim().toUpperCase();
   const ac = el('awayCode').value.trim().toUpperCase();
   if (hc) params.set('homeCode', hc);
   if (ac) params.set('awayCode', ac);
 
+  // Customizer params
+  const accent  = el('colorAccent').value.replace('#','');
+  const bgColor = el('colorBg').value.replace('#','');
+  const bgOp    = el('sl-bgOp').value;
+  const scoreSize  = el('sl-scoreSize').value;
+  const teamSize   = el('sl-teamSize').value;
+  const timerSize  = el('sl-timerSize').value;
+  const scoreBoxW  = el('sl-scoreBoxW').value;
+
+  if (accent  !== 'a855f7') params.set('accent',    accent);
+  if (bgColor !== '060608') params.set('bgColor',   bgColor);
+  if (bgOp    !== '94')     params.set('bgOp',      bgOp);
+  if (scoreSize !== '36')   params.set('scoreSize', scoreSize);
+  if (teamSize  !== '34')   params.set('teamSize',  teamSize);
+  if (timerSize !== '34')   params.set('timerSize', timerSize);
+  if (scoreBoxW > 0)        params.set('scoreBoxW', scoreBoxW);
+
+  if (!el('cchk-badges').checked)  params.set('showBadges',  '0');
+  if (!el('cchk-scorers').checked) params.set('showScorers', '0');
+  if (!el('cchk-flags').checked)   params.set('showFlags',   '0');
+
   const base = window.location.href.replace(/[^/]+\.html.*$/, 'overlay.html');
-  generatedURL = `${base}?${params.toString()}`;
+  return `${base}?${params.toString()}`;
+}
+
+// ── Live preview (debounced 400ms) ─────────────────────────────────────────
+function liveUpdate() {
+  clearTimeout(previewTimer);
+  const badge = el('liveUpdateBadge');
+  badge.classList.add('show');
+  previewTimer = setTimeout(() => {
+    el('prevFrame').src = buildOverlayURL(true);
+    setTimeout(() => badge.classList.remove('show'), 800);
+  }, 400);
+}
+
+function refreshPreview() {
+  el('prevFrame').src = buildOverlayURL(true);
+}
+
+// ── Generate final URL ────────────────────────────────────────────────────
+function generateURL() {
+  const fxId  = currentFxId || el('fixtureSelect').value;
+  const league = currentLeague || el('leagueSelect').value;
+  if (!fxId)   { alert('Bitte erst Spiele laden und ein Spiel auswählen!'); return; }
+  if (!league) { alert('Bitte Wettbewerb auswählen!'); return; }
+
+  generatedURL = buildOverlayURL(false);
 
   el('urlTxt').textContent = generatedURL;
-  el('obsUrlShort').textContent = generatedURL.length > 50
-    ? generatedURL.substring(0,50) + '…'
+  el('obsUrlShort').textContent = generatedURL.length > 55
+    ? generatedURL.substring(0,55) + '…'
     : generatedURL;
 
   el('urlBox').classList.add('visible');
   el('prevFrame').src = generatedURL;
-
   el('hdrLed').className = 'led purple';
   el('hdrTxt').textContent = 'URL GENERIERT';
 }
@@ -826,20 +1050,16 @@ function generateURL() {
 function copyURL() {
   if (!generatedURL) return;
   navigator.clipboard.writeText(generatedURL).then(() => {
-    const s = el('copyOk');
-    s.style.display = 'block';
+    const s = el('copyOk'); s.style.display = 'block';
     setTimeout(() => { s.style.display = 'none'; }, 3000);
   });
 }
 
-function openPreview() {
-  if (generatedURL) window.open(generatedURL, '_blank');
-}
+function openPreview() { if (generatedURL) window.open(generatedURL, '_blank'); }
 
 function resetAll() {
   el('fixtureSelect').innerHTML = '<option value="">— Zuerst Spiele laden —</option>';
   el('urlBox').classList.remove('visible');
-  el('prevFrame').src = 'overlay.html?demo=1';
   el('homeCode').value = '';
   el('awayCode').value = '';
   el('obsUrlShort').textContent = '— noch nicht generiert —';
@@ -847,8 +1067,96 @@ function resetAll() {
   generatedURL = ''; currentFxId = null; currentFxList = [];
   el('hdrLed').className = 'led';
   el('hdrTxt').textContent = 'BEREIT';
+  applyPreset('default');
 }
 
+// ── Customizer controls ────────────────────────────────────────────────────
+function onColorAccent(input) {
+  el('swatchAccent').style.background = input.value;
+  el('hexAccent').textContent = input.value;
+  deactivatePresets();
+  liveUpdate();
+}
+function onColorBg(input) {
+  el('swatchBg').style.background = input.value;
+  el('hexBg').textContent = input.value;
+  deactivatePresets();
+  liveUpdate();
+}
+function onSlider(input, valId, suffix) {
+  el(valId).textContent = input.value + suffix;
+  updateCustTrack(input);
+  deactivatePresets();
+}
+function onSliderBoxW(input) {
+  el('val-scoreBoxW').textContent = input.value > 0 ? input.value + 'px' : 'auto';
+  updateCustTrack(input);
+}
+function syncCtog(chk, labelId) { el(labelId).classList.toggle('active', chk.checked); }
+
+function syncRefreshSliders(src, valId) {
+  el(valId).textContent = src.value + 's';
+  updateCustTrack(src);
+  // Sync the other refresh slider too
+  const other = src.id === 'sl-refresh2' ? el('refreshSlider') : el('sl-refresh2');
+  const otherVal = src.id === 'sl-refresh2' ? 'refreshVal' : 'val-refresh2';
+  if (other) { other.value = src.value; el(otherVal).textContent = src.value + 's'; updateTrack(other); }
+}
+
+function deactivatePresets() {
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+}
+
+// ── Presets ────────────────────────────────────────────────────────────────
+const PRESETS = {
+  default:  { accent:'#a855f7', bgColor:'#060608', bgOp:94,  scoreSize:36, teamSize:34, timerSize:34, scoreBoxW:0, badges:true,  scorers:true,  flags:true  },
+  minimal:  { accent:'#a855f7', bgColor:'#000000', bgOp:75,  scoreSize:38, teamSize:36, timerSize:36, scoreBoxW:0, badges:false, scorers:false, flags:true  },
+  dark:     { accent:'#a855f7', bgColor:'#000000', bgOp:98,  scoreSize:36, teamSize:34, timerSize:34, scoreBoxW:0, badges:true,  scorers:true,  flags:true  },
+  ghost:    { accent:'#ffffff', bgColor:'#000000', bgOp:0,   scoreSize:36, teamSize:34, timerSize:34, scoreBoxW:0, badges:false, scorers:false, flags:false },
+  neon:     { accent:'#00e550', bgColor:'#000000', bgOp:90,  scoreSize:36, teamSize:34, timerSize:34, scoreBoxW:0, badges:true,  scorers:true,  flags:true  },
+  red:      { accent:'#ff2244', bgColor:'#0c0000', bgOp:92,  scoreSize:36, teamSize:34, timerSize:34, scoreBoxW:0, badges:true,  scorers:true,  flags:true  },
+  blue:     { accent:'#3b82f6', bgColor:'#00040c', bgOp:92,  scoreSize:36, teamSize:34, timerSize:34, scoreBoxW:0, badges:true,  scorers:true,  flags:true  },
+  gold:     { accent:'#ffaa00', bgColor:'#0a0700', bgOp:94,  scoreSize:38, teamSize:36, timerSize:36, scoreBoxW:0, badges:true,  scorers:true,  flags:true  },
+};
+
+function applyPreset(name) {
+  const p = PRESETS[name]; if (!p) return;
+
+  // Colors
+  el('colorAccent').value = p.accent; el('swatchAccent').style.background = p.accent; el('hexAccent').textContent = p.accent;
+  el('colorBg').value = p.bgColor;    el('swatchBg').style.background     = p.bgColor; el('hexBg').textContent    = p.bgColor;
+
+  // Sliders
+  setSlider('sl-bgOp',      'val-bgOp',      p.bgOp,      '%');
+  setSlider('sl-scoreSize', 'val-scoreSize', p.scoreSize, 'px');
+  setSlider('sl-teamSize',  'val-teamSize',  p.teamSize,  'px');
+  setSlider('sl-timerSize', 'val-timerSize', p.timerSize, 'px');
+  el('sl-scoreBoxW').value = p.scoreBoxW; el('val-scoreBoxW').textContent = p.scoreBoxW > 0 ? p.scoreBoxW + 'px' : 'auto';
+  updateCustTrack(el('sl-scoreBoxW'));
+
+  // Toggles
+  setCtog('cchk-badges',  'ct-badges',  p.badges);
+  setCtog('cchk-scorers', 'ct-scorers', p.scorers);
+  setCtog('cchk-flags',   'ct-flags',   p.flags);
+
+  // Mark active preset
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  el('preset-' + name)?.classList.add('active');
+
+  liveUpdate();
+}
+
+function setSlider(sliderId, valId, value, suffix) {
+  const s = el(sliderId); s.value = value;
+  el(valId).textContent = value + suffix;
+  updateCustTrack(s);
+}
+function setCtog(chkId, labelId, checked) {
+  el(chkId).checked = checked;
+  syncCtog(el(chkId), labelId);
+}
+
+// ── Feature badges ─────────────────────────────────────────────────────────
 function syncBadge() {
   tog('fb-anim',  'chk-anim');
   tog('fb-cards', 'chk-cards');
@@ -862,12 +1170,8 @@ function tog(bdId, chkId) {
   const c = b.querySelector('.fbadge-check');
   if (c) c.textContent = on ? '✓' : ' ';
 }
-function syncOpt(chk, labelId) {
-  el(labelId).classList.toggle('active', chk.checked);
-}
-function scrollToOBS() {
-  el('obsSection').scrollIntoView({ behavior:'smooth', block:'start' });
-}
+function syncOpt(chk, labelId) { el(labelId).classList.toggle('active', chk.checked); }
+function scrollToOBS() { el('obsSection').scrollIntoView({ behavior:'smooth', block:'start' }); }
 </script>
 </body>
 </html>
