@@ -822,7 +822,7 @@ body::after {
   <div class="fbadge off" id="fb-cards">  <span class="fbadge-check"> </span> KARTEN</div>
   <div class="fbadge off" id="fb-extra">  <span class="fbadge-check"> </span> NACHSPIELZEIT</div>
   <div class="fbadge off" id="fb-pen">    <span class="fbadge-check"> </span> ELFMETERSCHIESSEN</div>
-  <div class="wm-badge">🏆 WM 2026 SUPPORTED</div>
+  <div class="wm-badge" style="background:rgba(255,170,0,0.1);border-color:rgba(255,170,0,0.35);color:var(--amber)">⚠ WM 2026 = PAID PLAN</div>
 </div>
 
 <!-- ══ MAIN GRID ════════════════════════════════════════════════════════════ -->
@@ -890,11 +890,10 @@ body::after {
               <select class="fselect" id="leagueSelect">
                 <option value="">— Wählen —</option>
                 <optgroup label="🏆 International">
-                  <option value="1:2026">⚽ FIFA WM 2026 (läuft gerade!)</option>
-                  <option value="1:2022">⚽ FIFA WM 2022</option>
-                  <option value="4">UEFA Euro 2024</option>
-                  <option value="9">Copa America</option>
-                  <option value="34">Africa Cup</option>
+                  <option value="1:2022">⚽ FIFA WM 2022 (Katar)</option>
+                  <option value="4:2024">🏆 UEFA Euro 2024</option>
+                  <option value="9:2024">🏆 Copa America 2024</option>
+                  <option value="34:2023">🏆 Africa Cup 2023</option>
                 </optgroup>
                 <optgroup label="UEFA Club">
                   <option value="2">Champions League</option>
@@ -930,10 +929,9 @@ body::after {
             <div class="flabel">SAISON</div>
             <div class="sel-wrap">
               <select class="fselect" id="seasonSelect">
-                <option value="2026" selected>2026</option>
-                <option value="2025">2025</option>
-                <option value="2024">2024</option>
+                <option value="2024" selected>2024</option>
                 <option value="2023">2023</option>
+                <option value="2022">2022</option>
               </select>
             </div>
           </div>
@@ -1020,7 +1018,7 @@ body::after {
 
       <div class="mini-score">
         <div class="mini-badges">
-          <div class="mini-badge">WM 2026</div>
+          <div class="mini-badge">WM 2022</div>
           <div class="mini-badge">LIVE</div>
           <div class="mini-badge">KARTEN</div>
         </div>
@@ -1047,7 +1045,7 @@ body::after {
         <div class="chk-item">Elfmeterschiessen</div>
         <div class="chk-item">Nachspielzeit</div>
         <div class="chk-item">Transparenz</div>
-        <div class="chk-item">WM 2026 ✓</div>
+        <div class="chk-item">WM 2022 ✓</div>
         <div class="chk-item">Smart Rate-Limit</div>
       </div>
     </div>
@@ -1096,9 +1094,11 @@ body::after {
         <div class="step"><div class="step-n">!</div><div class="step-t">Bei Abpfiff: Polling <strong>stoppt</strong> automatisch</div></div>
         <div class="step"><div class="step-n">!</div><div class="step-t">Req-Counter im Overlay sichtbar</div></div>
       </div>
-      <div class="hint">
-        <strong>💡 WM 2026 TIPP</strong>
-        Wettbewerb "FIFA WM 2026" wählen, Saison 2026. Die WM läuft aktuell — API unterstützt alle Gruppenspiele und KO-Runde live!
+      <div class="api-info">
+        <strong>⚠ WM 2026 NICHT IM FREE PLAN</strong>
+        API-Football Free Plan erlaubt nur Saisons <strong>2022–2024</strong>. Die WM 2026 (aktuell) ist gesperrt.<br><br>
+        Für WM 2026 benötigst du den <strong>Basic Plan</strong> (~$10/Monat) auf api-football.com.<br>
+        Alternativ: WM 2022 (Katar) ist vollständig verfügbar!
       </div>
     </div>
   </div>
@@ -1125,7 +1125,7 @@ body::after {
 <footer class="footer">
   <div class="footer-badges">
     <div class="f-badge">KOSTENLOS</div>
-    <div class="f-badge">WM 2026</div>
+    <div class="f-badge">WM 2022</div>
     <div class="f-badge">RATE-LIMIT SMART</div>
     <div class="f-badge">4K READY</div>
   </div>
@@ -1253,14 +1253,39 @@ async function searchFixtures() {
     if (rl) showReqInfo(parseInt(rl), 100);
 
     if (json.errors && Object.keys(json.errors).length) {
-      alert('API Fehler: ' + Object.values(json.errors)[0]);
+      const errMsg = Object.values(json.errors)[0];
+      // Show inline error instead of alert
+      showSearchError(errMsg);
     } else {
+      clearSearchError();
       currentFxList = json.response || [];
       populateFx(currentFxList);
     }
-  } catch(e) { alert('Ladefehler: ' + e.message); }
+  } catch(e) { showSearchError('Verbindungsfehler: ' + e.message); }
 
   btn.textContent = '🔍 LADEN'; btn.disabled = false;
+}
+
+function showSearchError(msg) {
+  let box = el('searchErr');
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'searchErr';
+    box.style.cssText = 'padding:10px 12px;background:rgba(255,34,68,0.08);border:1px solid rgba(255,34,68,0.25);border-left:2px solid var(--red);font-family:var(--mono);font-size:11px;color:#ff8899;line-height:1.5;margin-bottom:8px;letter-spacing:0.3px;';
+    el('fixtureSelect').parentElement.parentElement.insertBefore(box, el('fixtureSelect').parentElement);
+  }
+  // Explain common errors clearly
+  let display = msg;
+  if (msg.includes('do not have access to this season')) {
+    display = `⚠ Free Plan: Diese Saison nicht verfügbar.\nVerfügbar: 2022–2024. WM 2026 nur mit Paid-Plan.\n→ Versuche eine andere Saison oder Liga.`;
+  }
+  box.textContent = display;
+  box.style.display = 'block';
+}
+
+function clearSearchError() {
+  const box = el('searchErr');
+  if (box) box.style.display = 'none';
 }
 
 function populateFx(fixtures) {
