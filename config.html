@@ -337,6 +337,9 @@ input[type=color]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;
   </button>
 </header>
 
+<!-- STICKY PREVIEW BLOCK -->
+<div id="stickyPreview" style="position:sticky;top:52px;z-index:150;box-shadow:0 4px 24px rgba(0,0,0,0.7);">
+
 <!-- SECTION RULE -->
 <div class="sec-rule">
   <div class="sec-diamond"></div>
@@ -367,6 +370,8 @@ input[type=color]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;
     ESPN API — WM 2026 LIVE
   </div>
 </div>
+
+</div><!-- /stickyPreview -->
 
 <!-- MAIN GRID -->
 <div class="main-grid">
@@ -509,16 +514,16 @@ input[type=color]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;
         <div class="fsec-label">OPTIONEN</div>
         <div class="opts-grid">
           <label class="opt-item active" id="opt-extra">
-            <input type="checkbox" id="chk-extra" checked onchange="syncBadge();syncOpt(this,'opt-extra')"> Nachspielzeit
+            <input type="checkbox" id="chk-extra" checked onchange="syncBadge();syncOpt(this,'opt-extra');liveUpdate()"> Nachspielzeit
           </label>
           <label class="opt-item active" id="opt-anim">
-            <input type="checkbox" id="chk-anim" checked onchange="syncBadge();syncOpt(this,'opt-anim')"> Tor-Animation
+            <input type="checkbox" id="chk-anim" checked onchange="syncBadge();syncOpt(this,'opt-anim');liveUpdate()"> Tor-Animation
           </label>
           <label class="opt-item active" id="opt-cards">
-            <input type="checkbox" id="chk-cards" checked onchange="syncBadge();syncOpt(this,'opt-cards')"> Karten
+            <input type="checkbox" id="chk-cards" checked onchange="syncBadge();syncOpt(this,'opt-cards');liveUpdate()"> Karten
           </label>
           <label class="opt-item" id="opt-penalty">
-            <input type="checkbox" id="chk-penalty" onchange="syncBadge();syncOpt(this,'opt-penalty')"> Elfmeter-Modus
+            <input type="checkbox" id="chk-penalty" onchange="syncBadge();syncOpt(this,'opt-penalty');liveUpdate()"> Elfmeter-Modus
           </label>
         </div>
 
@@ -1012,19 +1017,20 @@ function buildOverlayURL(demo) {
   return `${base}?${params.toString()}`;
 }
 
-// ── Live preview (debounced 400ms) ─────────────────────────────────────────
+// ── Live preview (debounced 150ms) ─────────────────────────────────────────
 function liveUpdate() {
   clearTimeout(previewTimer);
   const badge = el('liveUpdateBadge');
   badge.classList.add('show');
   previewTimer = setTimeout(() => {
     el('prevFrame').src = buildOverlayURL(true);
-    setTimeout(() => badge.classList.remove('show'), 800);
-  }, 400);
+    setTimeout(() => badge.classList.remove('show'), 1000);
+  }, 150);
 }
 
 function refreshPreview() {
   el('prevFrame').src = buildOverlayURL(true);
+  el('stickyPreview').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ── Generate final URL ────────────────────────────────────────────────────
