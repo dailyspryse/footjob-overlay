@@ -22,7 +22,7 @@
     position: relative;
   }
 
-  /* ── Badges ── */
+  /* Badges */
   .badges {
     display: flex;
     align-items: center;
@@ -30,261 +30,104 @@
     padding: 5px 18px;
     background: rgba(0,0,0,0.55);
     border-bottom: 1px solid #18101e;
-    font-size: 10.5px;
-    letter-spacing: 0.8px;
   }
 
   .badge {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: #a855f7;
-    font-weight: 700;
-    font-family:'Rajdhani',sans-serif;
-    font-size: 11px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    display: flex; align-items: center; gap: 5px;
+    color: #a855f7; font-weight: 700;
+    font-family:'Rajdhani',sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
   }
 
   .badge-dot {
-    width: 6px; height: 6px;
-    background: #a855f7;
-    border-radius: 50%;
+    width: 6px; height: 6px; background: #a855f7;
+    border-radius: 50%; flex-shrink: 0;
     animation: bdPulse 2s ease-in-out infinite;
-    flex-shrink: 0;
   }
-
   @keyframes bdPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
   .status-chip {
-    margin-left: auto;
-    font-size: 10px;
-    font-family:'Rajdhani',sans-serif;
-    font-weight: 700;
-    letter-spacing: 2px;
-    padding: 2px 8px;
-    transition: all 0.3s;
+    margin-left: auto; font-size: 10px;
+    font-family:'Rajdhani',sans-serif; font-weight: 700; letter-spacing: 2px; padding: 2px 8px;
   }
-
   .status-chip.live     { background:#a855f7; color:#000; }
   .status-chip.halftime { background:#3b1f5a; color:#a855f7; border:1px solid #5b2d8a; }
   .status-chip.finished { background:#1a1020; color:#555; border:1px solid #2a1840; }
   .status-chip.upcoming { background:#1a1a30; color:#6666aa; border:1px solid #2a2a50; }
 
-  /* ── Scoreboard ── */
-  .scoreboard {
-    display: flex;
-    align-items: center;
-    padding: 12px 20px;
-    min-height: 90px;
-  }
+  /* Scoreboard */
+  .scoreboard { display: flex; align-items: center; padding: 12px 20px; min-height: 90px; }
 
-  /* Timer */
   .timer-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-width: 100px;
-    background: #0d0a14;
-    border: 1px solid #221432;
-    padding: 8px 14px;
-    flex-shrink: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-width: 100px; background: #0d0a14; border: 1px solid #221432; padding: 8px 14px; flex-shrink: 0;
   }
+  .timer-main { font-size: 34px; font-weight: 700; color: #fff; letter-spacing: 3px; font-family:'Oswald',monospace; line-height: 1; }
+  .timer-extra { font-size: 12px; font-family:'Rajdhani',sans-serif; font-weight: 700; color: #c084fc; letter-spacing: 1px; min-height: 14px; margin-top: 2px; }
 
-  .timer-main {
-    font-size: 34px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 3px;
-    font-family:'Oswald',monospace;
-    line-height: 1;
-  }
-
-  .timer-extra {
-    font-size: 12px;
-    font-family:'Rajdhani',sans-serif;
-    font-weight: 700;
-    color: #c084fc;
-    letter-spacing: 1px;
-    min-height: 14px;
-    margin-top: 2px;
-  }
-
-  /* Teams */
-  .team-block {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
-    padding: 0 18px;
-  }
-
+  .team-block { display: flex; align-items: center; gap: 12px; flex: 1; padding: 0 18px; }
   .team-block.home { justify-content: flex-end; }
   .team-block.away { justify-content: flex-start; }
 
-  .team-flag {
-    width: 44px;
-    height: 29px;
-    object-fit: cover;
-    border: 1px solid #2a1a3a;
-    flex-shrink: 0;
-  }
+  .team-flag { width: 44px; height: 29px; object-fit: cover; border: 1px solid #2a1a3a; flex-shrink: 0; }
   .team-flag.hidden { display: none; }
 
   .team-name {
-    font-size: 34px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 4px;
-    font-family:'Oswald',sans-serif;
-    text-transform: uppercase;
-    line-height: 1;
+    font-size: 34px; font-weight: 700; color: #fff; letter-spacing: 4px;
+    font-family:'Oswald',sans-serif; text-transform: uppercase; line-height: 1;
     text-shadow: 0 0 20px rgba(168,85,247,0.12);
   }
 
-  /* Score */
-  .score-block {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-    padding: 0 12px;
-  }
-
+  .score-block { display: flex; align-items: center; gap: 8px; flex-shrink: 0; padding: 0 12px; }
   .score-box {
-    background: #0d0a14;
-    border: 2px solid #221432;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: #0d0a14; border: 2px solid #221432;
+    width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;
     transition: border-color 0.3s, background 0.3s;
   }
-
-  .score-box.goal-flash {
-    animation: goalBoxPulse 2s ease-out;
-  }
-
+  .score-box.goal-flash { animation: goalBoxPulse 2s ease-out; }
   @keyframes goalBoxPulse {
     0%   { border-color:#a855f7; background:rgba(168,85,247,0.25); }
     30%  { border-color:#c084fc; background:rgba(192,132,252,0.35); }
     60%  { border-color:#a855f7; background:rgba(168,85,247,0.12); }
     100% { border-color:#221432; background:#0d0a14; }
   }
-
-  .score-val {
-    font-size: 36px;
-    font-weight: 700;
-    color: #fff;
-    font-family:'Oswald',monospace;
-    line-height: 1;
-    transition: color 0.3s;
-  }
-
+  .score-val { font-size: 36px; font-weight: 700; color: #fff; font-family:'Oswald',monospace; line-height: 1; transition: color 0.3s; }
   .score-val.goal-color { color: #a855f7; text-shadow: 0 0 12px rgba(168,85,247,0.8); }
 
-  .center-icon {
-    font-size: 28px;
-    line-height: 1;
-    filter: drop-shadow(0 0 6px rgba(168,85,247,0.4));
-  }
+  .center-icon { font-size: 28px; line-height: 1; filter: drop-shadow(0 0 6px rgba(168,85,247,0.4)); }
 
-  /* Scorers */
   .scorers-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 2px 18px 8px;
-    min-height: 20px;
-    gap: 20px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 2px 18px 8px; min-height: 20px; gap: 20px;
   }
-
   .scorer-list {
-    font-size: 11px;
-    color: #887799;
-    font-family:'Rajdhani',sans-serif;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    max-width: 45%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 11px; color: #887799; font-family:'Rajdhani',sans-serif; font-weight: 600;
+    max-width: 45%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
 
-  /* Penalty bar */
-  .penalty-bar {
-    display: none;
-    padding: 4px 18px 6px;
-    background: rgba(120,0,160,0.12);
-    border-top: 1px solid #3b0060;
-    text-align: center;
-    font-size: 12px;
-    font-family:'Rajdhani',sans-serif;
-    font-weight: 700;
-    color: #c084fc;
-    letter-spacing: 2px;
-  }
-  .penalty-bar.visible { display: block; }
+  .penalty-bar { display:none; padding:4px 18px 6px; background:rgba(120,0,160,0.12); border-top:1px solid #3b0060; text-align:center; font-size:12px; font-family:'Rajdhani',sans-serif; font-weight:700; color:#c084fc; letter-spacing:2px; }
+  .penalty-bar.visible { display:block; }
 
-  /* Live dot */
-  .live-indicator {
-    position: absolute;
-    bottom: 6px;
-    right: 10px;
-  }
-
-  .live-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: #333;
-    transition: background 0.3s;
-  }
-  .live-dot.active {
-    background: #a855f7;
-    animation: blink 1.4s ease-in-out infinite;
-    box-shadow: 0 0 8px #a855f7;
-  }
+  .live-indicator { position:absolute; bottom:6px; right:10px; }
+  .live-dot { width:7px; height:7px; border-radius:50%; background:#333; transition:background 0.3s; }
+  .live-dot.active { background:#a855f7; animation:blink 1.4s ease-in-out infinite; box-shadow:0 0 8px #a855f7; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
   /* Card popup */
   .card-popup {
-    position: fixed;
-    top: 12px;
-    right: 14px;
-    padding: 10px 18px;
-    font-size: 15px;
-    font-weight: 700;
-    font-family:'Oswald',sans-serif;
-    letter-spacing: 1px;
-    display: none;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-    z-index: 100;
+    position:fixed; top:12px; right:14px; padding:10px 18px;
+    font-size:15px; font-weight:700; font-family:'Oswald',sans-serif; letter-spacing:1px;
+    display:none; align-items:center; gap:8px; box-shadow:0 4px 20px rgba(0,0,0,0.6); z-index:100;
   }
-
   .card-popup.yellow { background:#e6c200; color:#000; display:flex; }
   .card-popup.red    { background:#cc0000; color:#fff; display:flex; }
-
   @keyframes popIn  { from{transform:translateX(120px) scale(0.9);opacity:0} to{transform:translateX(0) scale(1);opacity:1} }
   @keyframes popOut { to{transform:translateX(120px);opacity:0} }
+  .card-popup.show { animation:popIn 0.35s ease-out; }
+  .card-popup.hide { animation:popOut 0.4s ease-in forwards; }
 
-  .card-popup.show { animation:popIn  0.35s ease-out; }
-  .card-popup.hide { animation:popOut 0.4s  ease-in forwards; }
-
-  /* Screen flash for goals */
-  .goal-flash-overlay {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background: rgba(168,85,247,0.0);
-    z-index: 50;
-  }
-  .goal-flash-overlay.flash {
-    animation: screenFlash 1.8s ease-out;
-  }
+  /* Goal screen flash */
+  .goal-flash-overlay { position:fixed; inset:0; pointer-events:none; background:rgba(168,85,247,0.0); z-index:50; }
+  .goal-flash-overlay.flash { animation:screenFlash 1.8s ease-out; }
   @keyframes screenFlash {
     0%   { background:rgba(168,85,247,0.0); }
     15%  { background:rgba(168,85,247,0.22); }
@@ -294,39 +137,15 @@
     100% { background:rgba(168,85,247,0.0); }
   }
 
-  /* Error / info bar */
-  .info-bar {
-    display: none;
-    padding: 4px 18px;
-    font-size: 10px;
-    font-family:'Rajdhani',sans-serif;
-    letter-spacing: 1px;
-  }
-  .info-bar.error   { background:rgba(100,0,0,0.35); border-top:1px solid #440000; color:#ff6666; display:block; }
-  .info-bar.warning { background:rgba(100,50,0,0.25); border-top:1px solid #442200; color:#ffaa44; display:block; }
-
-  /* Request counter (bottom right, tiny) */
-  .req-counter {
-    position: absolute;
-    bottom: 5px;
-    right: 22px;
-    font-family:'Rajdhani',sans-serif;
-    font-size: 9px;
-    color: #3a2050;
-    letter-spacing: 1px;
-    display: none;
-  }
-  .req-counter.visible { display: block; }
-  .req-counter.warn    { color: #664400; }
-  .req-counter.danger  { color: #660000; }
+  .info-bar { display:none; padding:4px 18px; font-size:10px; font-family:'Rajdhani',sans-serif; letter-spacing:1px; }
+  .info-bar.error { background:rgba(100,0,0,0.35); border-top:1px solid #440000; color:#ff6666; display:block; }
 </style>
 </head>
 <body>
 
 <div class="goal-flash-overlay" id="goalFlashOverlay"></div>
 
-<div class="wrapper" id="overlayWrapper">
-
+<div class="wrapper">
   <div class="badges" id="badgesBar">
     <div class="badge"><div class="badge-dot"></div> LIVE SCORE</div>
     <div class="badge"><div class="badge-dot"></div> SPIELZEIT</div>
@@ -342,27 +161,25 @@
       <div class="timer-main" id="timerMain">--'</div>
       <div class="timer-extra" id="timerExtra"></div>
     </div>
-
     <div class="team-block home">
       <div class="team-name" id="homeTeamName">---</div>
       <img class="team-flag hidden" id="homeFlag" src="" alt="">
     </div>
-
     <div class="score-block">
       <div class="score-box" id="homeScoreBox">
         <span class="score-val" id="homeScore">0</span>
       </div>
-      <div class="center-icon" id="centerIcon">🏆</div>
+      <div class="center-icon" id="centerIcon">
+        <svg id="trophySvg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="rgba(168,85,247,0.55)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M12 17c-5 0-8-3-8-7V5h16v5c0 4-3 7-8 7z"/><path d="M4 9H2v2a4 4 0 0 0 4 4"/><path d="M20 9h2v2a4 4 0 0 1-4 4"/></svg>
+      </div>
       <div class="score-box" id="awayScoreBox">
         <span class="score-val" id="awayScore">0</span>
       </div>
     </div>
-
     <div class="team-block away">
       <img class="team-flag hidden" id="awayFlag" src="" alt="">
       <div class="team-name" id="awayTeamName">---</div>
     </div>
-
     <div class="live-indicator">
       <div class="live-dot" id="liveDot"></div>
     </div>
@@ -372,140 +189,152 @@
     <div class="scorer-list" id="homeScorers"></div>
     <div class="scorer-list" id="awayScorers" style="text-align:right"></div>
   </div>
-
-  <div class="penalty-bar" id="penaltyBar">
-    ⚽ ELFMETERSCHIESSEN &nbsp;—&nbsp;
-    <span id="homePenalty">0</span> : <span id="awayPenalty">0</span>
-  </div>
-
+  <div class="penalty-bar" id="penaltyBar">ELFMETERSCHIESSEN — <span id="homePenalty">0</span> : <span id="awayPenalty">0</span></div>
   <div class="info-bar" id="infoBar"></div>
-
-  <div class="req-counter" id="reqCounter"></div>
 </div>
 
 <div class="card-popup" id="cardPopup"></div>
 
 <script>
-// ─── Config ───────────────────────────────────────────────────────────────
+// ── Config ────────────────────────────────────────────────────────────────
 const P = new URLSearchParams(window.location.search);
 const CFG = {
-  fixtureId:     P.get('fixture'),
-  apiKey:        P.get('apiKey') || '5b64c4de80bf8e61facd74ae73539a6a',
+  league:        P.get('league')        || 'FIFA.WORLD',
+  eventId:       P.get('eventId'),
   showCards:     P.get('showCards')     !== '0',
   showAnimation: P.get('showAnimation') !== '0',
   showExtra:     P.get('showExtra')     !== '0',
   showPenalty:   P.get('showPenalty')   === '1',
-  refreshRate:   Math.max(60, parseInt(P.get('refresh') || '90')) * 1000,
+  refresh:       Math.max(30, parseInt(P.get('refresh') || '60')) * 1000,
   homeCode:      P.get('homeCode')  || null,
   awayCode:      P.get('awayCode')  || null,
-  homeCountry:   P.get('homeCountry') || null,
-  awayCountry:   P.get('awayCountry') || null,
-  trophy:        P.get('trophy')    || '🏆',
+  trophy:        P.get('trophy')    || null,
   demo:          P.get('demo')      === '1',
-  apiHost:       'v3.football.api-sports.io',
 };
 
-// ─── State ────────────────────────────────────────────────────────────────
-let prevHomeGoals   = -1;
-let prevAwayGoals   = -1;
-let seenCardKeys    = new Set();
-let consecutiveErrs = 0;
-let requestsRemaining = null;
-let htSlowTimer = null;    // slower poll during HT
-let isFinished  = false;   // stop polling when FT
-let currentStatus = '';
+const ESPN_BASE = 'https://site.api.espn.com/apis/site/v2/sports/soccer';
 
-// Rate limit: 10/min, 100/day
-// Smart backoff: HT → 3min interval, FT → stop
-const HT_INTERVAL  = 3 * 60 * 1000;  // 3 min during halftime
-const LIVE_INTERVAL = CFG.refreshRate; // user-set (min 60s)
+// ── State ─────────────────────────────────────────────────────────────────
+let prevHomeGoals  = -1;
+let prevAwayGoals  = -1;
+let seenEventKeys  = new Set();
+let consecutiveErr = 0;
+let isFinished     = false;
+let nextTimer      = null;
+let homeTeamId     = null;
+let awayTeamId     = null;
 
-// ─── Boot ─────────────────────────────────────────────────────────────────
+// ── Boot ──────────────────────────────────────────────────────────────────
 function boot() {
-  el('centerIcon').textContent = CFG.trophy;
+  if (CFG.trophy) el('centerIcon').innerHTML = CFG.trophy;
   if (CFG.showAnimation) showEl('badgeAnim');
   if (CFG.showCards)     showEl('badgeCards');
   if (CFG.showExtra)     showEl('badgeExtra');
   if (CFG.showPenalty)   showEl('badgePenalty');
 
   if (CFG.demo) { loadDemo(); return; }
-  if (!CFG.fixtureId) { setChip('upcoming', 'KEIN FIXTURE'); return; }
+  if (!CFG.eventId) { setChip('upcoming', 'KEIN SPIEL'); return; }
 
   fetchData();
-  scheduleNext(LIVE_INTERVAL);
 }
-
-// ─── Smart Scheduler ──────────────────────────────────────────────────────
-let nextTimer = null;
 
 function scheduleNext(delay) {
   clearTimeout(nextTimer);
   if (isFinished) return;
-  nextTimer = setTimeout(() => {
-    fetchData();
-    // Re-schedule based on current match status after data comes in
-    const interval = currentStatus === 'HT' ? HT_INTERVAL : LIVE_INTERVAL;
-    scheduleNext(interval);
-  }, delay);
+  nextTimer = setTimeout(() => { fetchData(); }, delay);
 }
 
-// ─── Fetch ────────────────────────────────────────────────────────────────
+// ── ESPN Fetch ─────────────────────────────────────────────────────────────
 async function fetchData() {
   try {
-    const res  = await fetch(`https://${CFG.apiHost}/fixtures?id=${CFG.fixtureId}`, {
-      headers: { 'x-apisports-key': CFG.apiKey }
-    });
+    const url = `${ESPN_BASE}/${CFG.league}/scoreboard`;
+    const res  = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
 
-    // Track remaining requests from headers
-    const rl = res.headers.get('x-ratelimit-requests-remaining');
-    if (rl !== null) {
-      requestsRemaining = parseInt(rl);
-      updateReqCounter(requestsRemaining);
+    const events = json.events || [];
+    const event  = events.find(e => String(e.id) === String(CFG.eventId));
+
+    if (!event) {
+      // Try summary endpoint directly
+      await fetchSummary();
+      return;
     }
 
-    const json = await res.json();
-    if (!json.response?.length) throw new Error('No data');
-
-    consecutiveErrs = 0;
-    hideInfoBar();
-    renderFixture(json.response[0]);
+    consecutiveErr = 0;
+    el('infoBar').className = 'info-bar';
+    renderEvent(event);
 
   } catch(e) {
-    consecutiveErrs++;
-    console.warn('[overlay] fetch error:', e.message);
-    if (consecutiveErrs >= 2) {
-      showInfoBar('error', `⚠ Verbindung unterbrochen — letzte Daten aktiv (${e.message})`);
+    consecutiveErr++;
+    console.warn('[overlay] ESPN error:', e.message);
+    if (consecutiveErr >= 2) {
+      const ib = el('infoBar');
+      ib.className = 'info-bar error';
+      ib.textContent = `Verbindung unterbrochen (${e.message})`;
     }
     el('liveDot').className = 'live-dot';
+    scheduleNext(CFG.refresh);
   }
 }
 
-// ─── Render ───────────────────────────────────────────────────────────────
-function renderFixture(data) {
-  const { fixture, teams, goals, score, events = [] } = data;
-  const status = fixture.status;
-  currentStatus = status.short;
+async function fetchSummary() {
+  try {
+    const url = `${ESPN_BASE}/${CFG.league}/summary?event=${CFG.eventId}`;
+    const res  = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
 
-  // Stop polling on finished states
-  if (['FT','AET','PEN','AWD','WO','CANC','PST'].includes(status.short)) {
-    isFinished = true;
-    clearTimeout(nextTimer);
+    const header = json.header;
+    if (!header?.competitions?.length) throw new Error('No header data');
+
+    const comp = header.competitions[0];
+    renderCompetition(comp);
+    consecutiveErr = 0;
+    el('infoBar').className = 'info-bar';
+  } catch(e) {
+    consecutiveErr++;
+    el('liveDot').className = 'live-dot';
   }
+  scheduleNext(CFG.refresh);
+}
+
+// ── Render from scoreboard event ───────────────────────────────────────────
+function renderEvent(event) {
+  const comp = event.competitions[0];
+  renderCompetition(comp);
+  scheduleNext(isFinished ? 0 : CFG.refresh);
+}
+
+function renderCompetition(comp) {
+  const status  = comp.status;
+  const state   = status.type.state;     // "pre" | "in" | "post"
+  const detail  = status.type.shortDetail; // "10'", "HT", "FT", "FT-Pens"
+
+  const competitors = comp.competitors || [];
+  const home = competitors.find(c => c.homeAway === 'home');
+  const away = competitors.find(c => c.homeAway === 'away');
+
+  if (!home || !away) return;
+
+  // Store team IDs for event mapping
+  homeTeamId = home.team.id;
+  awayTeamId = away.team.id;
 
   // Teams
-  const homeName = teams.home.name;
-  const awayName = teams.away.name;
-  el('homeTeamName').textContent = CFG.homeCode || abbrev(homeName);
-  el('awayTeamName').textContent = CFG.awayCode || abbrev(awayName);
+  const homeName = home.team.displayName;
+  const awayName = away.team.displayName;
+  el('homeTeamName').textContent = CFG.homeCode || home.team.abbreviation || abbrev(homeName);
+  el('awayTeamName').textContent = CFG.awayCode || away.team.abbreviation || abbrev(awayName);
 
-  // Flags
-  setFlag('homeFlag', CFG.homeCountry || teams.home.country);
-  setFlag('awayFlag', CFG.awayCountry || teams.away.country);
+  // Flags — try ESPN logo, fallback to flagcdn
+  setFlag('homeFlag', homeName, home.team);
+  setFlag('awayFlag', awayName, away.team);
 
-  // Scores + animation
-  const hg = goals.home ?? 0;
-  const ag = goals.away ?? 0;
+  // Scores
+  const hg = parseInt(home.score || '0');
+  const ag = parseInt(away.score || '0');
+
   if (prevHomeGoals >= 0 && hg > prevHomeGoals && CFG.showAnimation) triggerGoal('home');
   if (prevAwayGoals >= 0 && ag > prevAwayGoals && CFG.showAnimation) triggerGoal('away');
   prevHomeGoals = hg;
@@ -515,34 +344,36 @@ function renderFixture(data) {
   el('awayScore').textContent = ag;
 
   // Timer
-  renderTimer(status);
+  renderTimer(status, detail);
 
-  // Scorers
-  renderScorers(events, homeName, awayName);
+  // Events (goals, cards)
+  const details = comp.details || [];
+  renderScorers(details);
+  if (CFG.showCards) detectCards(details, home.team, away.team);
 
-  // Cards
-  if (CFG.showCards) detectCards(events);
-
-  // Penalty
-  if (CFG.showPenalty && score.penalty?.home != null) {
-    el('homePenalty').textContent = score.penalty.home ?? 0;
-    el('awayPenalty').textContent = score.penalty.away ?? 0;
-    el('penaltyBar').classList.add('visible');
+  // Penalty shootout
+  if (CFG.showPenalty) {
+    const penHome = details.filter(d => d.shootout && d.scoringPlay && d.team?.id === homeTeamId).length;
+    const penAway = details.filter(d => d.shootout && d.scoringPlay && d.team?.id === awayTeamId).length;
+    if (detail.includes('Pen') || state === 'post' && penHome + penAway > 0) {
+      el('penaltyBar').classList.add('visible');
+      el('homePenalty').textContent = penHome;
+      el('awayPenalty').textContent = penAway;
+    }
   }
 
   // Status chip + live dot
-  const short = status.short;
-  const liveStates = ['1H','2H','ET','P','BT','INT'];
-  if (liveStates.includes(short)) {
-    setChip('live', 'LIVE');
-    el('liveDot').className = 'live-dot active';
-  } else if (short === 'HT') {
-    setChip('halftime', 'HALBZEIT');
-    el('liveDot').className = 'live-dot';
-    // Warn that next update is in 3 min
-    showInfoBar('warning', '⏸ Halbzeit — nächstes Update in 3 Min.');
-  } else if (['FT','AET','PEN'].includes(short)) {
-    setChip('finished', 'ABPFIFF');
+  if (state === 'in') {
+    if (detail === 'HT') {
+      setChip('halftime', 'HALBZEIT');
+      el('liveDot').className = 'live-dot';
+    } else {
+      setChip('live', 'LIVE');
+      el('liveDot').className = 'live-dot active';
+    }
+  } else if (state === 'post') {
+    isFinished = true;
+    setChip('finished', detail.includes('Pen') ? 'ELFM.' : 'ABPFIFF');
     el('liveDot').className = 'live-dot';
   } else {
     setChip('upcoming', 'WARTET');
@@ -550,71 +381,78 @@ function renderFixture(data) {
   }
 }
 
-function renderTimer(status) {
-  const { elapsed, short } = status;
+function renderTimer(status, detail) {
   const tMain = el('timerMain');
   const tExt  = el('timerExtra');
   tExt.textContent = '';
 
-  if (short === 'HT') {
+  // ESPN gives us the display string directly
+  if (detail === 'HT') {
     tMain.textContent = "45'";
     if (CFG.showExtra) tExt.textContent = 'HT';
     return;
   }
-  if (['FT','AET','PEN'].includes(short)) {
+  if (detail === 'FT' || detail === 'Full Time') {
     tMain.textContent = "90'";
-    if (CFG.showExtra) tExt.textContent = short;
+    if (CFG.showExtra) tExt.textContent = 'FT';
     return;
   }
-  if (['NS','TBD','PST','CANC'].includes(short)) {
-    tMain.textContent = "--'";
+  if (detail.includes('FT') || detail.includes('AET')) {
+    tMain.textContent = "90'";
+    if (CFG.showExtra) tExt.textContent = detail.replace('FT','').replace('-','').trim() || 'AET';
     return;
   }
-  if (elapsed != null) {
+
+  // Live minute — detail is like "10'", "45+2'", "90+3'"
+  if (detail && detail.includes("'")) {
     if (CFG.showExtra) {
-      if (short === '1H' && elapsed > 45) {
-        tMain.textContent = "45'";
-        tExt.textContent = `+${elapsed - 45}`;
-      } else if (short === '2H' && elapsed > 90) {
-        tMain.textContent = "90'";
-        tExt.textContent = `+${elapsed - 90}`;
-      } else if (short === 'ET' && elapsed > 120) {
-        tMain.textContent = "120'";
-        tExt.textContent = `+${elapsed - 120}`;
-      } else {
-        tMain.textContent = `${elapsed}'`;
+      // Handle "45+2'" format
+      const plusMatch = detail.match(/(\d+)\+(\d+)'/);
+      if (plusMatch) {
+        tMain.textContent = `${plusMatch[1]}'`;
+        tExt.textContent  = `+${plusMatch[2]}`;
+        return;
       }
-    } else {
-      const cap = short === '1H' ? 45 : short === '2H' ? 90 : elapsed;
-      tMain.textContent = `${Math.min(elapsed, cap)}'`;
     }
+    tMain.textContent = detail;
+    return;
   }
+
+  // Fallback: compute from clock value
+  const clockSec = status.clock ?? 0;
+  const minutes  = Math.floor(clockSec / 60);
+  tMain.textContent = `${minutes}'`;
 }
 
-function renderScorers(events, homeName, awayName) {
-  const homeGoals = events
-    .filter(e => e.type === 'Goal' && e.team.name === homeName && e.detail !== 'Missed Penalty')
-    .map(e => `⚽ ${lastName(e.player.name)} ${e.time.elapsed}'`);
+function renderScorers(details) {
+  const homeGoals = details
+    .filter(d => d.scoringPlay && !d.shootout && d.team?.id === homeTeamId)
+    .map(d => `${lastName(d.athletesInvolved?.[0]?.displayName)} ${d.clock?.displayValue || ''}`.trim());
 
-  const awayGoals = events
-    .filter(e => e.type === 'Goal' && e.team.name === awayName && e.detail !== 'Missed Penalty')
-    .map(e => `⚽ ${lastName(e.player.name)} ${e.time.elapsed}'`);
+  const awayGoals = details
+    .filter(d => d.scoringPlay && !d.shootout && d.team?.id === awayTeamId)
+    .map(d => `${lastName(d.athletesInvolved?.[0]?.displayName)} ${d.clock?.displayValue || ''}`.trim());
 
   el('homeScorers').textContent = homeGoals.join('  ·  ');
   el('awayScorers').textContent = awayGoals.join('  ·  ');
 }
 
-function detectCards(events) {
-  events.filter(e => e.type === 'Card').forEach(e => {
-    const key = `${e.time.elapsed}-${e.player.name}-${e.detail}`;
-    if (!seenCardKeys.has(key)) {
-      seenCardKeys.add(key);
-      showCardPopup(e.detail, e.player.name, e.team.name);
-    }
-  });
+function detectCards(details, homeTeam, awayTeam) {
+  details
+    .filter(d => d.yellowCard || d.redCard)
+    .forEach(d => {
+      const player = d.athletesInvolved?.[0]?.displayName || '';
+      const min    = d.clock?.displayValue || '';
+      const key    = `${player}-${min}-${d.yellowCard ? 'y' : 'r'}`;
+      if (!seenEventKeys.has(key)) {
+        seenEventKeys.add(key);
+        const teamName = d.team?.id === homeTeamId ? homeTeam.abbreviation : awayTeam.abbreviation;
+        showCardPopup(d.yellowCard ? 'yellow' : 'red', player, teamName);
+      }
+    });
 }
 
-// ─── Animations ───────────────────────────────────────────────────────────
+// ── Animations ────────────────────────────────────────────────────────────
 function triggerGoal(side) {
   const box = el(side === 'home' ? 'homeScoreBox' : 'awayScoreBox');
   const sc  = el(side === 'home' ? 'homeScore'    : 'awayScore');
@@ -636,11 +474,11 @@ function triggerGoal(side) {
 
 function showCardPopup(type, player, team) {
   const popup  = el('cardPopup');
-  const yellow = type.toLowerCase().includes('yellow');
-  const red    = type.toLowerCase().includes('red');
+  const yellow = type === 'yellow';
 
-  popup.className = 'card-popup show ' + (yellow ? 'yellow' : red ? 'red' : 'yellow');
-  popup.innerHTML = `${yellow ? '🟨' : '🟥'}&nbsp;${lastName(player)} <small style="opacity:0.7;font-size:11px">(${abbrev(team)})</small>`;
+  popup.className = 'card-popup show ' + type;
+  const cardRect = `<span style="display:inline-block;width:11px;height:15px;background:${yellow ? '#ffaa00' : '#ff2244'};border-radius:1px;margin-right:7px;vertical-align:middle;box-shadow:0 0 8px ${yellow ? '#ffaa00' : '#ff2244'};flex-shrink:0"></span>`;
+  popup.innerHTML = `${cardRect}${lastName(player)} <small style="opacity:0.7;font-size:11px">(${team})</small>`;
   popup.style.display = 'flex';
 
   setTimeout(() => {
@@ -649,52 +487,46 @@ function showCardPopup(type, player, team) {
   }, 5000);
 }
 
-// ─── Request counter ──────────────────────────────────────────────────────
-function updateReqCounter(remaining) {
-  const rc = el('reqCounter');
-  rc.classList.add('visible');
-  rc.textContent = `API ${remaining}/100`;
-  if (remaining <= 10) rc.className = 'req-counter visible danger';
-  else if (remaining <= 30) rc.className = 'req-counter visible warn';
-  else rc.className = 'req-counter visible';
-}
-
-// ─── Info bar ─────────────────────────────────────────────────────────────
-function showInfoBar(type, msg) {
-  const b = el('infoBar');
-  b.className = 'info-bar ' + type;
-  b.textContent = msg;
-}
-function hideInfoBar() {
-  el('infoBar').className = 'info-bar';
-}
-
-// ─── Demo ────────────────────────────────────────────────────────────────
+// ── Demo ──────────────────────────────────────────────────────────────────
 function loadDemo() {
-  el('homeTeamName').textContent = 'USA';
-  el('awayTeamName').textContent = 'GER';
+  el('homeTeamName').textContent = 'ARG';
+  el('awayTeamName').textContent = 'CPV';
   el('homeScore').textContent    = '2';
-  el('awayScore').textContent    = '1';
-  el('timerMain').textContent    = "67'";
-  el('homeScorers').textContent  = "⚽ Pulisic 23'  ·  ⚽ Adams 55'";
-  el('awayScorers').textContent  = "⚽ Müller 38'";
+  el('awayScore').textContent    = '0';
+  el('timerMain').textContent    = "38'";
+  el('homeScorers').textContent  = "Messi 12'  ·  Di María 31'";
+  el('awayScorers').textContent  = '';
   const hf = el('homeFlag');
   const af = el('awayFlag');
-  hf.src = 'https://flagcdn.com/w40/us.png'; hf.classList.remove('hidden');
-  af.src = 'https://flagcdn.com/w40/de.png'; af.classList.remove('hidden');
+  hf.src = 'https://flagcdn.com/w40/ar.png'; hf.classList.remove('hidden');
+  af.src = 'https://flagcdn.com/w40/cv.png'; af.classList.remove('hidden');
   el('liveDot').className = 'live-dot active';
   setChip('live', 'WM 2026 LIVE');
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────
-function setFlag(id, country) {
-  if (!country) return;
-  const code = countryToCode(country);
-  if (!code) return;
+// ── Helpers ───────────────────────────────────────────────────────────────
+function setFlag(id, teamName, teamObj) {
   const img = el(id);
-  img.src = `https://flagcdn.com/w40/${code}.png`;
-  img.classList.remove('hidden');
-  img.onerror = () => img.classList.add('hidden');
+  // 1) Try ESPN logo
+  const logos = teamObj?.logos;
+  if (logos?.length) {
+    img.src = logos[0].href;
+    img.classList.remove('hidden');
+    img.onerror = () => tryFlagCdn(img, teamName);
+    return;
+  }
+  tryFlagCdn(img, teamName);
+}
+
+function tryFlagCdn(img, teamName) {
+  const code = countryToCode(teamName);
+  if (code) {
+    img.src = `https://flagcdn.com/w40/${code}.png`;
+    img.classList.remove('hidden');
+    img.onerror = () => img.classList.add('hidden');
+  } else {
+    img.classList.add('hidden');
+  }
 }
 
 function setChip(cls, text) {
@@ -708,11 +540,9 @@ function el(id)     { return document.getElementById(id); }
 function lastName(n){ if(!n) return ''; const p=n.trim().split(' '); return p[p.length-1]; }
 
 function abbrev(name) {
-  const k = ABBREVS[name];
-  if (k) return k;
+  const k = ABBREVS[name]; if (k) return k;
   const w = name.trim().split(/\s+/);
-  if (w.length === 1) return name.substring(0,3).toUpperCase();
-  return (w[0].substring(0,1) + w[1].substring(0,2)).toUpperCase();
+  return w.length === 1 ? name.substring(0,3).toUpperCase() : (w[0][0]+w[1].substring(0,2)).toUpperCase();
 }
 
 const ABBREVS = {
@@ -725,34 +555,30 @@ const ABBREVS = {
   'Ghana':'GHA','Australia':'AUS','Wales':'WAL','Scotland':'SCO','Ireland':'IRL',
   'Czech Republic':'CZE','Slovakia':'SVK','Albania':'ALB','Slovenia':'SVN',
   'Georgia':'GEO','Chile':'CHI','Colombia':'COL','Ecuador':'ECU','Peru':'PER',
-  'Romania':'ROU','Hungary':'HUN','Iran':'IRN','Saudi Arabia':'KSA','Qatar':'QAT',
+  'Romania':'ROU','Hungary':'HUN','Saudi Arabia':'KSA','Qatar':'QAT',
   'Tunisia':'TUN','Egypt':'EGY','Nigeria':'NGA','Cameroon':'CMR','Costa Rica':'CRC',
-  'Real Madrid':'RMA','Barcelona':'BAR','Bayern Munich':'BAY','Manchester City':'MCI',
-  'Manchester United':'MUN','Liverpool':'LIV','Chelsea':'CHE','Arsenal':'ARS',
-  'Tottenham Hotspur':'TOT','Juventus':'JUV','AC Milan':'ACM','Inter':'INT',
-  'Napoli':'NAP','Paris Saint Germain':'PSG','Borussia Dortmund':'BVB',
-  'Bayer Leverkusen':'B04','RB Leipzig':'RBL','Atletico Madrid':'ATM',
+  'Cape Verde':'CPV','Panama':'PAN','Jamaica':'JAM','Cuba':'CUB',
+  'Guatemala':'GUA','Honduras':'HON','El Salvador':'SLV',
 };
 
-function countryToCode(c) {
+function countryToCode(name) {
   const m = {
     'Portugal':'pt','Croatia':'hr','Germany':'de','France':'fr','Spain':'es',
     'England':'gb-eng','Brazil':'br','Argentina':'ar','Italy':'it','Netherlands':'nl',
     'Belgium':'be','Uruguay':'uy','Poland':'pl','Denmark':'dk','Switzerland':'ch',
     'Austria':'at','Czech Republic':'cz','Sweden':'se','Norway':'no','Finland':'fi',
     'Turkey':'tr','Greece':'gr','Romania':'ro','Hungary':'hu','Serbia':'rs',
-    'Ukraine':'ua','Russia':'ru','Japan':'jp','South Korea':'kr','Mexico':'mx',
+    'Ukraine':'ua','Japan':'jp','South Korea':'kr','Mexico':'mx',
     'United States':'us','USA':'us','Canada':'ca','Morocco':'ma','Senegal':'sn',
     'Ghana':'gh','Cameroon':'cm','Australia':'au','Ecuador':'ec','Wales':'gb-wls',
     'Scotland':'gb-sct','Ireland':'ie','Slovakia':'sk','Albania':'al','Slovenia':'si',
-    'Kosovo':'xk','Iceland':'is','Georgia':'ge','Chile':'cl','Colombia':'co',
-    'Peru':'pe','Bolivia':'bo','Paraguay':'py','Venezuela':'ve','Iran':'ir',
+    'Georgia':'ge','Chile':'cl','Colombia':'co','Peru':'pe','Iran':'ir',
     'Saudi Arabia':'sa','Qatar':'qa','Tunisia':'tn','Egypt':'eg','Nigeria':'ng',
     'Costa Rica':'cr','Panama':'pa','Honduras':'hn','North Macedonia':'mk',
-    'Montenegro':'me','Bosnia':'ba','Bulgaria':'bg','New Zealand':'nz',
-    'Cuba':'cu','Guatemala':'gt','Jamaica':'jm','Trinidad and Tobago':'tt',
+    'Cape Verde':'cv','Jamaica':'jm','Cuba':'cu','Guatemala':'gt','El Salvador':'sv',
+    'Bolivia':'bo','Paraguay':'py','Venezuela':'ve','New Zealand':'nz',
   };
-  return m[c] || null;
+  return m[name] || null;
 }
 
 boot();
